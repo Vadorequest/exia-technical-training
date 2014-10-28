@@ -73,7 +73,7 @@ module.exports = {
    * to 80 (http://) or 443 (https://) if you have an SSL certificate        *
    ***************************************************************************/
 
-    port: process.env.PORT || _serverConfigLocal.translate && _serverConfigLocal.translate.web && _serverConfigLocal.translate.web.port ? _serverConfigLocal.translate.web.port : _serverConfig.translate.web.port,
+    port: process.env.PORT || _serverConfigLocal.app && _serverConfigLocal.app.web && _serverConfigLocal.app.web.port ? _serverConfigLocal.app.web.port : _serverConfig.app.web.port,
 
 
 
