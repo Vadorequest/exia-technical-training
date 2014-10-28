@@ -9,8 +9,5 @@
         "prefixMessageCode": "__"
     },
     "schemas": [
-        "category",
-        "type",
-        "user"
     ]
 }
