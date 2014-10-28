@@ -35,7 +35,7 @@ module.exports.routes = {
   '/': {
     controller    : 'home',
     action        : 'index'
-  },
+  }
 
   /***************************************************************************
    *                                                                          *
@@ -47,8 +47,4 @@ module.exports.routes = {
    *                                                                          *
    ***************************************************************************/
 
-  '/dashboard': {
-    controller    : 'dashboard/dashboard',
-    action        : 'index'
-  }
 };
