@@ -53,69 +53,12 @@ var controller = require('./Controller');
         */
         Home.index = function (req, res) {
             Home.super(req, res, function (req, res, options) {
-                options.title = 'Ayolan Translation application';
+                options.title = 'Parallax scrolling demo';
 
                 Home.renderView(req, res, options);
             });
         };
-
-        /**
-        **************************************************************************************************
-        **************************************** Add custom methods **************************************
-        **************************************************************************************************
-        */
-        /**
-        * Temp page, just to fake the fact that the user is a visitor not connected.
-        * @param req       Request.
-        * @param res       Response.
-        */
-        Home.visitor = function (req, res) {
-            Home.super(req, res, function (req, res, options) {
-                req.session.user.connected = false;
-                req.session.user.role = null;
-                options.title = 'You are now a VISITOR!';
-                req.flash('messages', new __message('__49', { type: 'info', placement: { from: 'top', align: 'left' } }));
-
-                Home.renderView(req, res, options, 'home/index');
-            });
-        };
-
-        /**
-        * Temp page, just to fake the fact that the user is connected as member.
-        * @param req       Request.
-        * @param res       Response.
-        */
-        Home.member = function (req, res) {
-            Home.super(req, res, function (req, res, options) {
-                req.session.user.connected = true;
-                req.session.user.role = 'member';
-                options.title = 'You are now a MEMBER!';
-                req.flash('messages', new __message('__48', { type: 'success', placement: { from: 'bottom' } }));
-
-                Home.renderView(req, res, options, 'home/index');
-            });
-        };
-
-        /**
-        * Temp page, just to fake the fact that the user is connected as admin.
-        * @param req       Request.
-        * @param res       Response.
-        */
-        Home.admin = function (req, res) {
-            Home.super(req, res, function (req, res, options) {
-                req.session.user.connected = true;
-                req.session.user.role = 'admin';
-                options.title = 'You are now a ADMIN!';
-                req.flash('messages', new __message('__47', { type: 'info', placement: { from: 'top' } }));
-
-                Home.renderView(req, res, options, 'home/index');
-            });
-        };
-        Home.exportedMethods = [
-            'visitor',
-            'member',
-            'admin'
-        ];
+        Home.exportedMethods = [];
         return Home;
     })(controller.Controllers.Controller);
     Controllers.Home = Home;
