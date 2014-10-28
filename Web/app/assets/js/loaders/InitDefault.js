@@ -27,8 +27,20 @@ define(["require", "exports", "Init"], function(require, exports, init) {
         * @private
         */
         InitDefault.prototype._custom = function () {
-            consoleDev('Custom index initialization starting...', 'debug');
-            consoleDev('Custom index initialization done with success.', 'debug');
+            consoleDev('Custom home initialization starting...', 'debug');
+            consoleDev('Initializing Pixi. ', 'debug');
+
+            var stage = new PIXI.Stage(0x222222);
+            var renderer = PIXI.autoDetectRenderer($('#game').width(), $('#game').height());
+            renderer.view.id = "game";
+
+            // Append the rendered view to the DOM.
+            $('#game').replaceWith(renderer.view);
+
+            // Render the stage. Basically refresh the canvas content.
+            renderer.render(stage);
+
+            consoleDev('Custom home initialization done with success.', 'debug');
         };
         return InitDefault;
     })(init.Init);

@@ -52,6 +52,10 @@ export module Controllers {
         public static index(req, res){
             Home.super(req, res, function(req, res, options){
                 options.title = 'Parallax scrolling demo';
+                options.game = {
+                    width: 800,
+                    height: 600
+                };
 
                 Home.renderView(req, res, options);
             });

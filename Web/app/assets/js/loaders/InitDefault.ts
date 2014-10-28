@@ -24,7 +24,24 @@ export class InitDefault extends init.Init{
      * @private
      */
     private _custom(){
-        consoleDev('Custom index initialization starting...', 'debug');
-        consoleDev('Custom index initialization done with success.', 'debug');
+        consoleDev('Custom home initialization starting...', 'debug');
+        consoleDev('Initializing Pixi. ', 'debug');
+
+        var stage : PIXI.Stage = new PIXI.Stage(0x222222);
+        var renderer : PIXI.IPixiRenderer = PIXI.autoDetectRenderer(
+            /*$(window).width() / 100 * 90,
+            $(window).height() / 100 * 90*/
+            $('#game').width(),
+            $('#game').height()
+        );
+        renderer.view.id = "game";
+
+        // Append the rendered view to the DOM.
+        $('#game').replaceWith(renderer.view);
+
+        // Render the stage. Basically refresh the canvas content.
+        renderer.render(stage);
+
+        consoleDev('Custom home initialization done with success.', 'debug');
     }
 }

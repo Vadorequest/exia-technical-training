@@ -54,6 +54,10 @@ var controller = require('./Controller');
         Home.index = function (req, res) {
             Home.super(req, res, function (req, res, options) {
                 options.title = 'Parallax scrolling demo';
+                options.game = {
+                    width: 800,
+                    height: 600
+                };
 
                 Home.renderView(req, res, options);
             });
