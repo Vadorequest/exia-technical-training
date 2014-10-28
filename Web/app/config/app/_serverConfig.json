@@ -22,8 +22,6 @@
     },
     "db" : {
         "collectionsContainingCodeColumn": [
-            "type",
-            "category"
         ]
     },
     "web": {

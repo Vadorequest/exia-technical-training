@@ -1,4 +1,3 @@
 {
-    "environment": "development",
-    "defaultTheme": "yeti"
+    "environment": "development"
 }

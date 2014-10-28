@@ -49,15 +49,15 @@ module.exports.bootstrap = function (cb) {
      * ********************** Database Connect ***********************
      * ***************************************************************
      */
-    var mongodbConfig = require('./app/mongodb.json')[__config.public.environment];
-    mongoose.connect('mongodb://'+mongodbConfig.host+'/'+mongodbConfig.database);
-
-    var db = mongoose.connection;
-    db.on('error', console.error.bind(console, 'connection error:'));
-
-    db.once('open', function callback () {
-        consoleDev('Mongoose db connection is now open from Translate.');
-    });
+    //var mongodbConfig = require('./app/mongodb.json')[__config.public.environment];
+    //mongoose.connect('mongodb://'+mongodbConfig.host+'/'+mongodbConfig.database);
+    //
+    //var db = mongoose.connection;
+    //db.on('error', console.error.bind(console, 'connection error:'));
+    //
+    //db.once('open', function callback () {
+    //    consoleDev('Mongoose db connection is now open from Translate.');
+    //});
 
     /**
      * Initialize the database. Require all Models and store them in the cache.
