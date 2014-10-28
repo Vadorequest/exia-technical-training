@@ -1,4 +1,48 @@
 {
-	"Welcome": "Bienvenue",
-	"A brand new app.": "Une toute nouvelle application."
+    "__lang__": "fr",
+    "__0" : "Le Serveur est actuellement en cours de maintenance. Veuillez patientez et réessayer plus tard.",
+
+    "__1"   : {
+        "m" : "Le login est invalide (caractères accépter : _$0)",
+        "a" : ["-_"]
+    },
+    "__2" : "Veuillez saisir un login",
+    "__3" : {
+        "m" : "Ce login est trop court (_$0 caractères minimum)",
+        "a" : ["4"]
+    },
+    "__4" : {
+        "m" : "Ce login est trop long (_$0 caractères maximum)",
+        "a" : ["16"]
+    },
+    "__5" : "Ce login est déjà utilisé.",
+
+    "__6" : {
+        "m" : "Le mot de passe est trop court (_$0 caractères minimum)",
+        "a" : ["8"]
+    },
+    "__7" : {
+        "m" : "Le mot de passe est trop long (_$0 caractères minimum)",
+        "a" : ["20"]
+    },
+    "__8" : "Veuillez saisir un mot de passe",
+    "__9" : "Les 2 mots de passe saisie sont différents",
+
+    "__10" : "Le compte est actuellement bloquer. Contactez un administrateur.",
+    "__11" : "Limite de connection atteinte. Veuillez patientez.",
+    "__12": {
+        "m": "Le login doit avoir de _$0 à _$1 caractères.",
+        "a": ["4", "16"]
+    },
+    "__13": {
+        "m": "La taille du mot de passe doit être compris entre _$0 et _$1 caractères.",
+        "a": ["8", "20"]
+    },
+
+    "__14" : "L'adresse Email saisie est invalide.",
+
+    "__15" : "Les Web Services sont en cours de maintenance. Veuillez patientez et réessayer plus tard.",
+    "__16" : "Cette adresse email est déjà utilisée."
+
+
 }

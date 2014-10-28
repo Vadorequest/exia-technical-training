@@ -1,0 +1,16 @@
+{
+    "private": false,
+    "target": "browser",
+    "environment": "development",
+    "defaultLanguage": "en",
+    "languages": {
+        "messageKey": "m",
+        "argsKey": "a",
+        "prefixMessageCode": "__"
+    },
+    "schemas": [
+        "category",
+        "type",
+        "user"
+    ]
+}

@@ -1,0 +1,19 @@
+<% /* Display all messages */ %>
+<% /* Example from the controller: */ %>
+<% /* req.flash('messages', new __message('__17', {type: 'info', placement: {from: 'top'}})); */ %>
+<script type="text/javascript">
+    $(function(){
+        <% _.each(messages, function(message){ %>
+            // We need to use requireJs to load the file, because they aren't available immediately. Cannot use the globals here since the code is executed when the page renders.
+            require(['Message', 'Lang'], function( __message, __lang ) {
+                // Convert the JSON into an usable Message instance.
+                var message = __message.Message.create(<%- JSON.stringify(message)%>);
+
+                // Display the notification, but to do so we need to wait that the global lang instance is ready to translate anything.
+                __lang.Lang.waitForInstance(function(){
+                    notification(message.getMessage(), message.getData());
+                });
+            });
+        <%})%>
+    });
+</script>

@@ -1,3 +1,5 @@
+
+
 /**
  * Policy Mappings
  * (sails.config.policies)
@@ -20,32 +22,23 @@
 module.exports.policies = {
 
   /***************************************************************************
-  *                                                                          *
-  * Default policy for all controllers and actions (`true` allows public     *
-  * access)                                                                  *
-  *                                                                          *
-  ***************************************************************************/
+   *                                                                          *
+   * Default policy for all controllers and actions (`true` allows public     *
+   * access)                                                                  *
+   *                                                                          *
+   ***************************************************************************/
 
-  // '*': true,
+  // Default policy for all controllers and actions
+  // True in dev mode.
+  '*': require('./app/serverConfig.json').environment === 'development' ? true : 'isConnected',
 
   /***************************************************************************
-  *                                                                          *
-  * Here's an example of mapping some policies to run before a controller    *
-  * and its actions                                                          *
-  *                                                                          *
-  ***************************************************************************/
-	// RabbitController: {
-
-		// Apply the `false` policy as the default for all of RabbitController's actions
-		// (`false` prevents all access, which ensures that nothing bad happens to our rabbits)
-		// '*': false,
-
-		// For the action `nurture`, apply the 'isRabbitMother' policy
-		// (this overrides `false` above)
-		// nurture	: 'isRabbitMother',
-
-		// Apply the `isNiceToAnimals` AND `hasRabbitFood` policies
-		// before letting any users feed our rabbits
-		// feed : ['isNiceToAnimals', 'hasRabbitFood']
-	// }
+   *                                                                          *
+   * Policies on a Controller based level                                     *
+   *                                                                          *
+   ***************************************************************************/
+  HomeController: {
+    // Allow access to all methods in the Home controller.
+    '*': true
+  }
 };

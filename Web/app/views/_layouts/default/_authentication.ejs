@@ -1,0 +1,95 @@
+<div class="panel authentication col-xs-12 col-sm-10 col-md-6 col-lg-4">
+    <form id="authentication" class="login">
+        <input type="hidden" name="_csrf" value="<%= _csrf %>" />
+        <h3>
+            <span class="glyphicon glyphicon-lock"></span>
+            Member Access
+        </h3>
+        <p class="notice">Please enter your password to access your account.</p>
+        <div class="form-group">
+            <input id="login" name="login" value="<%= dev()? 'Vadorequest' : ''%>" type="text" placeholder="<%= lang.get('__34')%>" class="form-control" required="required" autofocus="autofocus" />
+        </div>
+        <div class="form-group">
+            <input id="password" name="password" value="<%= dev()? '123456789' : ''%>" type="password" placeholder="Password" class="form-control" required="required" />
+        </div>
+        <div class="action"><button type="button" id="submit" class="btn_send">Log in</button></div>
+        <div class="clearfix">
+            <a href="#" class="pull-right">Forgot your password ?</a>
+        </div>
+        <div id="response" class="col-sm-12 alert alert-danger hidden"></div>
+    </form>
+</div>
+
+<script type="text/javascript">
+    $( function () {
+
+        // On click nowhere or escape touch, hide authentication window
+        $( document ).on( {
+            click: function( e ) {
+                if ( $ ( "div.authentication" ).is( ":visible" ) && e.target.tagName === "DIV" ) {
+                    $( "div.authentication" ).fadeToggle( 500 );
+                }
+            },
+            keydown: function ( e ) {
+                if ( $( "div.authentication" ).is( ":visible" ) && e.which === 27 ) {
+                    $("div.authentication").fadeToggle( 500 );
+                }
+            }
+        } );
+
+        // On click link_authentication, show authentication window
+        $( "#global > header #link_authentication" ).click( function () {
+            $( "div.authentication" ).fadeToggle( 500 );
+        });
+
+        $('#authentication #password').bind('keydown', function(event){
+            if(event.keyCode == 13){
+                $('#authentication #submit').trigger('click');
+            }
+        });
+
+        $('#authentication #submit').bind('click', function(event){
+            home_authentication($('#authentication'));
+        });
+    });
+
+    function home_authentication(form){
+        __validator.check([
+                    __validator.rulesUserLogin($("#login").val()),
+                    __validator.rulesUserPasswordPublic($("#password").val())
+                ], function(errors, keysModelChecked, keysChecked){
+                    socket.send('user/authentication', {
+                                login: keysModelChecked.login,
+                                password: sha256_digest(keysModelChecked.password)
+                            },
+                            function(message){
+                                if(message.getStatus()){
+                                    $('#response').removeClass('alert-danger').addClass('alert-success');
+
+                                    setTimeout(function(){
+                                        $('.tooltip .cl_tooltip').click();
+
+                                        setTimeout(function(){
+                                            document.location.href = '/user/account';
+                                        }, 400);
+                                    }, 1500);
+                                }
+
+                                form.find('#response').html(message.getAllMessages());
+                                form.find('#response').removeClass('hidden');
+                            });
+
+                },
+                /**
+                 * Client validation error callback.
+                 * @param message
+                 */
+                function(message){
+                    // Client side validation failed.
+                    $('#response').removeClass('alert-danger').addClass('alert-success');
+
+                    form.find('#response').html(message.getAllMessages());
+                    form.find('#response').removeClass('hidden');
+                });
+    }
+</script>

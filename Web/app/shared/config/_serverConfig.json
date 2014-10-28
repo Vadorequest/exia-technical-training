@@ -1,0 +1,151 @@
+{
+    "private": true,
+    "target": "server",
+    "web": {
+        "webservice": {
+            "url": "http://127.0.0.1",
+            "port": 1337
+        },
+        "autoStartGrunt": true
+    },
+    "game": {
+        "webservice": {
+            "url": "http://127.0.0.1",
+            "port": 1500
+        },
+        "server": {
+            "url": "http://127.0.0.1",
+            "port": 1501
+        },
+        "checkRedis": true,
+        "checkMongodb": true,
+        "autoStartWebService": true
+    },
+    "mongo": {
+        "error": {
+            "log": "game-server/logs/mongo.log"
+        }
+    },
+    "path": {
+        "config": {
+            "app": "shared/config/",
+            "local": "shared/config/local/",
+            "shared": false
+        }
+    },
+    "cache": {
+        "lastCacheTimestampFile": ".tmp/cache/shared.cache",
+        "reloadCachedFilesFromGameOnStart": false,
+        "secBeforeReloadCache": 15,
+        "files": {
+            "config": [
+                "serverConfig",
+                "_serverConfig",
+                "messages"
+            ],
+            "libs": [
+                "AntiForce",
+                "Cli",
+                "Grunt",
+                "Lang",
+                "Request",
+                "Sails"
+            ],
+            "core_controllers": [
+                "CoreController"
+            ],
+            "core_libs": [
+                "CoreCache",
+                "CoreDao"
+            ],
+            "core_models": [
+                "CoreModel"
+            ],
+            "core_services": [
+                "bootstrapHelper",
+                "configHelper",
+                "objectHelper",
+                "stringHelper"
+            ],
+            "typescript_def": [
+                "defLoader.d",
+                "AStar.d",
+                "colpick.d",
+                "express.d",
+                "JQuery.d",
+                "lib.d",
+                "mongodb.d",
+                "mongoose.d",
+                "node.d",
+                "node_redis.d",
+                "pixi.d",
+                "pomelo.d",
+                "Q.d",
+                "require.d",
+                "socket.io.d",
+                "webgl.d",
+
+                "debug.d",
+                "functions.d",
+                "globals.d",
+                "coreController.d",
+                "coreModel.d",
+                "coreDao.d",
+                "coreCache.d",
+
+                "chatSecurity.d",
+                "lang.d",
+                "message.d",
+                "messageLang.d",
+                "validatorMessage.d",
+
+                "IChatDataSend.d"
+            ],
+            "globals": [
+                "debug",
+                "functions",
+                "lodashExtends",
+                "objectExtended",
+                "services"
+            ],
+            "public": [
+                "DaoPublic",
+                "Format",
+                "Lang",
+                "Message",
+                "MessageLang",
+                "Validator",
+                "ValidatorMessage"
+            ]
+        }
+    },
+    "validator": {
+        "filename": {
+            "minLength": 4,
+            "maxLength": 20
+        },
+        "folder": {
+            "minLength": 4,
+            "maxLength": 16
+        },
+        "languageCode": {
+            "minLength": 1,
+            "maxLength": 100
+        },
+        "limit": {
+            "min": 1
+        },
+        "mongoDbId": {
+            "minLength": 24,
+            "maxLength": 30
+        },
+        "resource": {
+            "minLength": 4,
+            "maxLength": 20
+        },
+        "world": {
+            "minLength": 4,
+            "maxLength": 20
+        }
+    }
+}

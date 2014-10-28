@@ -12,8 +12,16 @@
 module.exports = function(grunt) {
 
 	grunt.config.set('uglify', {
+        before: {
+            src: [
+                '.tmp/public/concat/productionBefore.js'
+            ],
+            dest: '.tmp/public/min/productionBefore.js'
+        },
 		dist: {
-			src: ['.tmp/public/concat/production.js'],
+			src: [
+                '.tmp/public/concat/production.js'
+            ],
 			dest: '.tmp/public/min/production.min.js'
 		}
 	});

@@ -1,0 +1,34 @@
+<nav id="<%= id%>" class="" role="navigation">
+    <ul>
+        <% _.each(menu, function(entry){%>
+            <% if(!entry.roles || _.contains(entry.roles, currentUser.role)){%>
+
+                <% if(!entry.childs){%>
+                    <% /* The entry contains only a direct link, no sub link. */%>
+                    <%- partial('leftNavigationLink.ejs', {entry: entry})%>
+                <%}else{%>
+                    <li>
+                        <ul>
+                            <% /* Add a previous link to go back to the parent. */%>
+                            <% if(entry.previous){%>
+                                <%- partial('leftNavigationLink.ejs', {entry: entry, sup: true, icon: false})%>
+                            <%}%>
+
+                            <% _.each(entry.childs, function(child){%>
+                                <% /* The entry contains child, render all of them. */%>
+                                <%- partial('leftNavigationLink.ejs', {entry: child})%>
+                            <%})%>
+                        </ul>
+
+                        <% /* Generate the top-level link which contains sub links. */%>
+                        <a href="<%= entry.href%>" title="<%= entry.title || entry.text%>" class="<%= entry.classes%> <%= entry.namespace ? __view.activeControllerNs(entry.namespace, controller) : __view.activeController(entry.controller, controller)%>">
+                            <i class="fa fa-<%= entry.icon%>"></i>
+                            <span><%= entry.text%></span>
+                            <span class="sub"></span>
+                        </a>
+                    </li>
+                <%}%>
+            <%}%>
+        <%})%>
+    </ul>
+</nav>

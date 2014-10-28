@@ -1,0 +1,5 @@
+<% if(currentUser.connected){ %>
+    <%- partial('_connected')%>
+<% }else{ %>
+    <%- partial('_visitor')%>
+<% } %>

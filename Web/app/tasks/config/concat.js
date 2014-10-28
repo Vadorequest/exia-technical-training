@@ -13,6 +13,10 @@
 module.exports = function(grunt) {
 
 	grunt.config.set('concat', {
+        jsBefore: {
+            src: require('../pipeline').jsFilesToInjectBefore,
+            dest: '.tmp/public/concat/productionBefore.js'
+        },
 		js: {
 			src: require('../pipeline').jsFilesToInject,
 			dest: '.tmp/public/concat/production.js'

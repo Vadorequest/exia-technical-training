@@ -8,30 +8,45 @@
  * for matching multiple files.)
  */
 
-
+// Load our config.
+var __config = require('./config')();
 
 // CSS files to inject in order
 //
 // (if you're using LESS with the built-in default config, you'll want
 //  to change `assets/styles/importer.less` instead.)
 var cssFilesToInject = [
-  'styles/**/*.css'
+    'linker/styles/lib/**/*.css',
+    'linker/styles/common/**/*.css',
+    'linker/styles/layouts/*.css',
+    'linker/styles/views/*.css',
+    'linker/styles/devices/**/*.css',
+    'linker/styles/**/*.css'
 ];
 
 
 // Client-side javascript files to inject in order
 // (uses Grunt-style wildcard/glob/splat expressions)
+var jsFilesToInjectBefore = [
+    // jQuery
+    'js/lib/jquery.min.js',
+
+    // Bring in the socket.io client
+    'js/lib/socket.io.js',
+    'js/lib/sails.io.js',
+    'js/lib/lodash.js',
+    'js/lib/app.js',
+    'js/lib/validator-extended.js',
+    'js/lib/notification.js',
+
+    // Import globals.
+    'js/' + __config.environment + '/*.js'
+];
+
 var jsFilesToInject = [
-  
-  // Load sails.io before everything else
-  'js/dependencies/sails.io.js',
-
-  // Dependencies like jQuery, or Angular are brought in here
-  'js/dependencies/**/*.js',
-
   // All of the rest of your client-side js files
   // will be injected here in no particular order.
-  'js/**/*.js'
+  'linker/js/**/*.js'
 ];
 
 
@@ -45,7 +60,7 @@ var jsFilesToInject = [
 // templates get spit out to the same file.  Be sure and check out `tasks/README.md`
 // for information on customizing and installing new tasks.
 var templateFilesToInject = [
-  'templates/**/*.html'
+    'linker/templates/**/*.ejs'
 ];
 
 
@@ -55,6 +70,9 @@ var templateFilesToInject = [
 // they reside in the first place)
 module.exports.cssFilesToInject = cssFilesToInject.map(function(path) {
   return '.tmp/public/' + path;
+});
+module.exports.jsFilesToInjectBefore = jsFilesToInjectBefore.map(function (path) {
+    return '.tmp/public/' + path;
 });
 module.exports.jsFilesToInject = jsFilesToInject.map(function(path) {
   return '.tmp/public/' + path;

@@ -1,0 +1,145 @@
+[
+    {
+        "href": "/",
+        "controller": "home",
+        "action": "index",
+        "icon": "home",
+        "text": "Home",
+        "classes": ""
+    },
+    {
+        "href": "/translation",
+        "controller": "translation",
+        "action": "index",
+        "icon": "comments",
+        "text": "Translations",
+        "classes": ""
+    },
+    {
+        "href": "/user",
+        "roles": ["member", "admin"],
+        "controller": "user",
+        "action": "index",
+        "icon": "users",
+        "text": "Users",
+        "classes": ""
+    },
+    {
+        "href": "",
+        "controller": "language",
+        "action": "index",
+        "icon": "language",
+        "text": "Languages",
+        "classes": "",
+        "previous": {
+            "text": "Languages",
+            "classes": ""
+        },
+        "childs": [
+            {
+                "href": "/language/statistics",
+                "controller": "language",
+                "action": "statistics",
+                "icon": "pie-chart",
+                "text": "Statistics",
+                "classes": ""
+            },
+            {
+                "href": "/language/ask",
+                "roles": ["member", "admin"],
+                "controller": "language",
+                "action": "ask",
+                "icon": "plus",
+                "text": "Ask missing",
+                "title": "Ask us to manage a new language",
+                "classes": ""
+            }
+        ]
+    },
+    {
+        "href": "",
+        "roles": ["admin"],
+        "namespace": "dashboard",
+        "icon": "dashboard",
+        "text": "Dashboard",
+        "classes": "",
+        "previous": {
+            "text": "Dashboard",
+            "classes": ""
+        },
+        "childs": [
+            {
+                "href": "/dashboard/translation",
+                "controller": "dashboard/translation",
+                "action": "index",
+                "icon": "list-alt",
+                "text": "Translations",
+                "classes": ""
+            },
+            {
+                "href": "/dashboard/user",
+                "controller": "dashboard/user",
+                "action": "index",
+                "icon": "users",
+                "text": "Users",
+                "classes": ""
+            },
+            {
+                "href": "/dashboard/language",
+                "controller": "dashboard/language",
+                "action": "index",
+                "icon": "language",
+                "text": "Languages",
+                "classes": ""
+            },
+            {
+                "href": "/dashboard/tag",
+                "controller": "dashboard/tag",
+                "action": "index",
+                "icon": "tags",
+                "text": "Tags",
+                "classes": ""
+            },
+            {
+                "href": "/dashboard/application",
+                "controller": "dashboard/application",
+                "action": "index",
+                "icon": "database",
+                "text": "Applications",
+                "classes": ""
+            },
+            {
+                "href": "/dashboard/role",
+                "controller": "dashboard/role",
+                "action": "index",
+                "icon": "key",
+                "text": "Roles",
+                "classes": ""
+            },
+            {
+                "href": "/dashboard/type",
+                "controller": "dashboard/type",
+                "action": "index",
+                "icon": "bookmark",
+                "text": "Types",
+                "classes": ""
+            },
+            {
+                "href": "/dashboard/category",
+                "controller": "dashboard/category",
+                "action": "index",
+                "icon": "cubes",
+                "text": "Categories",
+                "classes": ""
+            },
+            {
+                "href": "/dashboard/statistics",
+                "controller": "dashboard/statistics",
+                "action": "index",
+                "icon": "area-chart",
+                "text": "Statistics",
+                "classes": ""
+            }
+        ]
+    }
+]

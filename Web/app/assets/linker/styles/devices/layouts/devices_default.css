@@ -1,0 +1,34 @@
+@media screen and (max-width: 1200px) {
+  body.layout_default > nav,
+  body.layout_default nav ul li ul {
+    width: 75px !important;
+  }
+  body.layout_default > nav ul li a span.sub {
+    width: 57% !important;
+  }
+  body.layout_default > nav ul li a span:not(.sub) {
+    width: 28% !important;
+    opacity: 0;
+  }
+  body.layout_default > nav.resize,
+  body.layout_default nav ul li ul.resize {
+    width: 230px !important;
+  }
+  body.layout_default > nav ul li a span.sub.resize {
+    width: 25% !important;
+  }
+  body.layout_default > nav ul li a span:not(.sub).resize {
+    width: 60% !important;
+    opacity: 1 !important;
+  }
+}
+@media (max-width: 490px) {
+  .hidden-xxs {
+    display: none !important;
+  }
+}
+@media screen and (max-width: 768px) {
+  .visible-xs-inline {
+    display: inline-block !important;
+  }
+}

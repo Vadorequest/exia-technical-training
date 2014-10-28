@@ -1,0 +1,44 @@
+@import "../../loader";
+
+// Applied in all views that use the default layout.
+@media screen and (max-width: 1200px) {
+  body.layout_default {
+    > nav, nav ul li ul {
+      width: 75px !important;
+    }
+
+    > nav ul li a span.sub {
+      width: 57% !important;
+    }
+
+    > nav ul li a span:not(.sub) {
+      width: 28% !important;
+      opacity: 0;
+    }
+
+    > nav.resize, nav ul li ul.resize {
+      width: 230px !important;
+    }
+
+    > nav ul li a span.sub.resize {
+      width: 25% !important;
+    }
+
+    > nav ul li a span:not(.sub).resize {
+      width: 60% !important;
+      opacity: 1 !important;
+    }
+  }
+}
+
+@media (max-width: 490px) {
+  .hidden-xxs {
+    display: none !important;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .visible-xs-inline {
+    display: inline-block !important;
+  }
+}

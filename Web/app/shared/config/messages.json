@@ -1,0 +1,9 @@
+{
+    "_README": "These fields are not used yet. But it could be used in the futur by other applications or whatever.",
+    "message": {
+        "FIELD_NAME_MESSAGE" : "m",
+        "FIELD_NAME_DATA" : "d",
+        "FIELD_NAME_STATUS" : "s",
+        "FIELD_NAME_TYPE_MESSAGE" : "t"
+    }
+}

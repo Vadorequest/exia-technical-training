@@ -1,0 +1,33 @@
+{
+    "translate": {
+        "web": {
+            "url": "http://127.0.0.1",
+            "port": 5000
+        }
+    },
+    "mongo": {
+        "error": {
+            "log": "logs/mongo.log"
+        }
+    },
+    "cache": {
+        "reloadCachedFilesFromGameOnStart": true
+    },
+    "path": {
+        "config": {
+            "app": "config/app/",
+            "local": "config/local/",
+            "shared": "shared/config/"
+        }
+    },
+    "db" : {
+        "collectionsContainingCodeColumn": [
+            "type",
+            "category"
+        ]
+    },
+    "web": {
+        "autoStartGrunt": false
+    }
+
+}

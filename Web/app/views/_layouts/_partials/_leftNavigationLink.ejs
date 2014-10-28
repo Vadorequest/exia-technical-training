@@ -1,0 +1,23 @@
+<% sup = typeof sup !== 'undefined' ? sup : false%>
+<% sub = typeof sub !== 'undefined' ? sub : false%>
+<% icon = typeof icon !== 'undefined' ? icon : true%>
+
+<% if(!entry.roles || _.contains(entry.roles, currentUser.role)){%>
+    <li>
+        <% if(sup){%>
+            <span class="sup"></span>
+        <%}%>
+
+        <a href="<%= entry.href%>" title="<%= entry.title || entry.text%>" class="<%= sup ? 'sup' : 'part'%> <%= entry.classes%> <%= __view.activePage(entry.controller, entry.action, controller, action)%>">
+            <% if(icon){%>
+                <i class="fa fa-<%= entry.icon%>"></i>
+            <%}%>
+
+            <span><%= entry.text%></span>
+        </a>
+
+        <% if(sub){%>
+            <span class="sub"></span>
+        <%}%>
+    </li>
+<%}%>

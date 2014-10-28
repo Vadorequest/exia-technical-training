@@ -1,0 +1,17 @@
+{
+    "development": {
+        "host" : "127.0.0.1",
+        "port" : "3306",
+        "database" : "ayolan-translation-development",
+        "user" : "ayolan",
+        "password" : "fudkr9qvuoEt0JP2$DwIo4cEC9DWas5c"
+    },
+
+    "production": {
+        "host" : "127.0.0.1",
+        "port" : "3306",
+        "database" : "ayolan-translation-production",
+        "user" : "ayolan",
+        "password" : "fudkr9qvuoEt0JP2$DwIo4cEC9DWas5c"
+    }
+}

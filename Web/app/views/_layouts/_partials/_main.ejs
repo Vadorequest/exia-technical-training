@@ -1,0 +1,25 @@
+<% if(currentUser.connected){ %>
+    <%/* Menu at the left side that show the navigation links. */%>
+    <!--LEFT NAVMENU-->
+    <%- partial('leftNavigation', {id: 'left_navigation', menu: configHelper.load('data/leftNavigation')}) %>
+    <!--LEFT NAVMENU END-->
+<% } %>
+
+<!--MAIN SECTION-->
+<section id="global" class="flex-1">
+    <%/* Menu at the top that show basic links and user links. */%>
+    <!--TOP NAV-->
+    <%- partial('topNavigation') %>
+    <!--TOP NAV END-->
+
+    <section id="main" class="flex" role="main">
+        <section class="container">
+            <% /* Load the public partial to display a group of messages. */ %>
+            <%- partial('../../_partials/displayMessages', {messages: flash.messages}) %>
+
+            <% /* Load the view content, depending on the called url. */ %>
+            <%- body %>
+        </section>
+    </section>
+</section>
+<!--MAIN SECTION END-->

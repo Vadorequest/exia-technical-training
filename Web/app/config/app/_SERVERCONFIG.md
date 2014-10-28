@@ -1,0 +1,2 @@
+- `__config.db`: Contains data relative to the database configuration.
+- `__config.db.collectionsContainingCodeColumn`: Contains all tables that interact with the `code` column. These columns are parsed to get the higher existing code when the app startup in order to store this number in the memory to attribute new codes based on this value.
