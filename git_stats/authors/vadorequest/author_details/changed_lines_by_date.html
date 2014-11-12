@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>GitStats - exia-technical-training</title>
+    <meta charset='utf-8'>
+    <link href='../../../assets/bootstrap/css/bootstrap.min.css' rel='stylesheet' type='text/css'>
+    <style>
+      body { padding-top: 60px; }
+    </style>
+    <link href='../../../assets/bootstrap/css/bootstrap-responsive.min.css' rel='stylesheet' type='text/css'>
+    <script src='../../../assets/jquery.min.js' type='text/javascript'></script>
+    <script src='../../../assets/bootstrap/js/bootstrap.min.js' type='text/javascript'></script>
+    <script src='../../../assets/highstock.js' type='text/javascript'></script>
+  </head>
+  <body>
+    <div class='navbar navbar-fixed-top'>
+      <div class='navbar-inner'>
+        <div class='container'>
+          <a class='btn btn-navbar' data-target='.nav-collapse' data-toggle='collapse'>
+            <span class='icon-bar'></span>
+            <span class='icon-bar'></span>
+            <span class='icon-bar'></span>
+          </a>
+          <a class='brand' href='../../../index.html'>GitStats - exia-technical-training</a>
+          <div class='nav-collapse collapse'>
+            <ul class='nav'>
+              <li class=''>
+                <a href='../../../general.html'>General</a>
+              </li>
+              <li class=''>
+                <a href='../../../activity/by_date.html'>Activity</a>
+              </li>
+              <li class='active'>
+                <a href='../../best_authors.html'>Authors</a>
+              </li>
+              <li class=''>
+                <a href='../../../files/by_date.html'>Files</a>
+              </li>
+              <li class='active'>
+                <a href='../../../lines/by_date.html'>Lines</a>
+              </li>
+              <li class=''>
+                <a href='../../../comments/by_date.html'>Comments</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class='container'>
+      <div class='tabbable tabs-left'>
+        <ul class='nav nav-tabs'>
+          <li class=''>
+            <a href='commits_by_date.html'>Commits by date</a>
+          </li>
+          <li class='active'>
+            <a href='changed_lines_by_date.html'>Changed lines by date</a>
+          </li>
+          <li class=''>
+            <a href='insertions_by_date.html'>Lines added by date</a>
+          </li>
+          <li class=''>
+            <a href='deletions_by_date.html'>Lines deleted by date</a>
+          </li>
+        </ul>
+        <div class='tab-content'>
+          <div class='tab-pane active'>
+            <div class='page-header'>
+              <h1 class='pagination-centered'>Changed lines by date</h1>
+            </div>
+                    <script type="text/javascript">
+                    (function() {
+                      var onload = window.onload;
+                      window.onload = function(){
+                        if (typeof onload == "function") onload();
+                                var options = { "title": { "text": "" },"legend": { "enabled": true,"layout": "vertical","backgroundColor": "#FFFFFF","align": "left","verticalAlign": "top","x": 100,"y": 70,"floating": true,"shadow": true },"xAxis": { "title": { "text": null } },"yAxis": { "title": { "text": "Lines" },"labels": {  } },"tooltip": { "enabled": true },"credits": { "enabled": false },"plotOptions": { "areaspline": {  } },"chart": { "defaultSeriesType": "line","renderTo": "charts.changed_lines_by_author_by_date" },"subtitle": {  },"series": [{ "name": "Vadorequest","type": "spline","data": [ [ 1414522528000,11 ],[ 1414522667000,26 ],[ 1414523169000,41 ],[ 1414524215000,3984 ],[ 1414524401000,3984 ],[ 1414525258000,82424 ],[ 1414525995000,82431 ],[ 1414526082000,82445 ],[ 1414526374000,82630 ],[ 1414526748000,82632 ],[ 1414526754000,100546 ],[ 1414526961000,100558 ],[ 1414527311000,102991 ],[ 1414527321000,103206 ],[ 1414527616000,103209 ],[ 1414528892000,103209 ],[ 1414528914000,103325 ],[ 1414532185000,103343 ],[ 1414532214000,103403 ],[ 1414534550000,103512 ],[ 1414535246000,103556 ],[ 1414540800000,103556 ],[ 1414627200000,103556 ],[ 1414713600000,103556 ],[ 1414800000000,103556 ],[ 1414886400000,103556 ],[ 1414972800000,103556 ],[ 1415059200000,103556 ],[ 1415145600000,103556 ],[ 1415232000000,103556 ],[ 1415318400000,103556 ],[ 1415404800000,103556 ],[ 1415491200000,103556 ],[ 1415577600000,103556 ],[ 1415664000000,103556 ],[ 1415750400000,103556 ],[ 1415836800000,103556 ],[ 1415923200000,103556 ],[ 1416048738000,126442 ],[ 1416051741000,126447 ],[ 1416052084000,126449 ],[ 1416053100000,126449 ],[ 1416053306000,126458 ],[ 1416053489000,126459 ],[ 1416053526000,126461 ],[ 1416055131000,126814 ],[ 1416056064000,126901 ],[ 1416058330000,127016 ],[ 1416060173000,127113 ],[ 1416071499000,127543 ],[ 1416083617000,127556 ],[ 1416098319000,127835 ],[ 1416098978000,127961 ],[ 1416099147000,128000 ],[ 1416099562000,128043 ],[ 1416099650000,128080 ],[ 1416100616000,128153 ],[ 1416104986000,128446 ],[ 1416168946000,128583 ],[ 1416182400000,128583 ],[ 1416268800000,128583 ],[ 1416390432000,128697 ],[ 1416403112000,128700 ],[ 1416405704000,128976 ] ] }] };
+                    
+                    window.chart_charts.changed_lines_by_author_by_date = new Highcharts.StockChart(options);
+            
+                      };
+                    })()
+                    </script>
+            <div id="charts.changed_lines_by_author_by_date"></div>
+            <small>
+              <center>5 best authors shown</center>
+            </small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
