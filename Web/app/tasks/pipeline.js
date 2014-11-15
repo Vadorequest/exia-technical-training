@@ -44,8 +44,11 @@ var jsFilesToInjectBefore = [
 ];
 
 var jsFilesToInject = [
-  // All of the rest of your client-side js files
-  // will be injected here in no particular order.
+    // We don't need to have access to PIXI before to include the game engine, but it must be loaded before it.
+  'linker/js/lib/pixi*.js',
+
+    // All of the rest of your client-side js files
+    // will be injected here in no particular order.
   'linker/js/**/*.js'
 ];
 
