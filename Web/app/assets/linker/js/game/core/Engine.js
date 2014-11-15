@@ -1,3 +1,5 @@
+///<reference path='./../defLoader.d.ts' />
+///<reference path='./Layer.ts'/>
 var Game;
 (function (Game) {
     var Core;
@@ -9,12 +11,15 @@ var Game;
             function Engine() {
             }
             /**
-             * Public static method, accessible from the client to start the game init process.
+             **************************************************************************************************
+             **************************************** Public methods ******************************************
+             **************************************************************************************************
              */
-            Engine.initialize = function () {
-                // Initialize the game.
-                var init = new Game.Core.Engine()._initGame();
-            };
+            /**
+             **************************************************************************************************
+             **************************************** Private methods *****************************************
+             **************************************************************************************************
+             */
             /**
              * Initialize Game canvas.
              * @private
@@ -60,6 +65,18 @@ var Game;
                 requestAnimFrame(function () {
                     self._update();
                 });
+            };
+            /**
+             **************************************************************************************************
+             **************************************** Public static methods ***********************************
+             **************************************************************************************************
+             */
+            /**
+             * Public static method, accessible from the client to start the game init process.
+             */
+            Engine.initialize = function () {
+                // Initialize the game.
+                var init = new Game.Core.Engine()._initGame();
             };
             return Engine;
         })();

@@ -1,3 +1,4 @@
+///<reference path='./../defLoader.d.ts' />
 var Game;
 (function (Game) {
     var Core;
