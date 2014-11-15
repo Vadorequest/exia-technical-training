@@ -5,11 +5,12 @@ declare class MessageLang {
     private _message: any;
     private _args: any;
 
-    constructor(message: string, args?: any);
-    public getMessage(args: any, translate: boolean, language: string): string;
+    constructor(message: string, variables?: any);
+    public getMessage(options: any, variables: any): string;
     public setMessage(message: string): void;
-    public getArgs(): any;
-    public setArgs(args: any): void;
+    public _getMessage(): any;
+    public getVariables(): Array<any>;
+    public setVariables(variables: any);
     public isComplexMessage(): boolean;
     public toSimpleObject(): any;
     public static create(message: string, args: any): MessageLang;

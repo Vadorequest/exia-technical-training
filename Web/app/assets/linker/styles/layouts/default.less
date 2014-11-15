@@ -49,6 +49,7 @@ body.layout_default {
       margin: 0;
       padding: 0;
       border-radius: 0;
+      z-index: @zindex-navbar;
 
       > div.navbar-header {
         height: 50px;
@@ -242,15 +243,6 @@ body.layout_default {
             right: 40%;
             .transform(rotate(-45deg));
           }
-
-          span.sub.resize {
-            width: 60%;
-          }
-
-          span:not(.sub).resize {
-            width: 25%;
-            opacity: 0;
-          }
         }
 
         a:not(.sup):after {
@@ -296,14 +288,31 @@ body.layout_default {
     a.pointer-events {
       pointer-events: none;
     }
-  }
 
-  > #left_navigation.resize, #left_navigation ul li ul.resize {
-    width: 75px;
-  }
+    &.resize {
+      width: 75px;
 
-  > #left_navigation.responsive {
-    width: 55px !important;
+      ul li {
+        ul {
+          width: 75px;
+        }
+
+        a {
+          span.sub {
+            width: 60%;
+          }
+
+          span:not(.sub) {
+            width: 25%;
+            opacity: 0;
+          }
+        }
+      }
+    }
+
+    &.responsive {
+      width: 55px !important;
+    }
   }
 
   div.panel.authentication {

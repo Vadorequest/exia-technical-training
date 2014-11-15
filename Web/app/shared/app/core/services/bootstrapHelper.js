@@ -5,7 +5,7 @@
  */
 
 // Application base path.
-basePath = __dirname + '/../../../../';
+basePath = require('path').normalize(__dirname + '/../../../../');
 
 /**
  * Require globals functions.
@@ -100,7 +100,6 @@ requireJs.config({
  * @static __message            Message container to communicate between client and server.
  * @static __validatorMessage   Message container to communicate between client and server for validation handler.
  * @static __format             Used to format data, basically response between client and server.
- * @static __view               View library, contains mostly helpers, used client and server side.
  *
  * /!\ WARNING: The relative path here is '/', defined previously via requireJs.config, but it's true ONLY when using requireJs to load files! /!\
  */
@@ -108,18 +107,19 @@ __messageLang = requireJs('./public/MessageLang').MessageLang;
 __message = requireJs('./public/Message').Message;
 __validatorMessage = requireJs('./public/ValidatorMessage').ValidatorMessage;
 __format = requireJs('./public/Format').Format;
-__view = requireJs('./public/View').View;
 
 /**
  * Create all global vars in shared/app libraries.
  *
- * @static __lang               Lang module for the server part.
+ * @static __lang               Lang module for the server part. The public version is used on the client.
  * @static __request            To send HTTP request, based on request module.
+ * @static __view               View library, contains mostly helpers for the server part. The public version is used on the client.
  *
  * /!\ WARNING: The relative path here is '/shared/app', defined previously via requireJs.config, but it's true ONLY when using requireJs to load files! /!\
  */
 __lang = requireJs('./Lang').Lang;
 __request = requireJs('./Request').Request;
+__view = requireJs('./View').View;
 
 // Load what is specific to this application, if specific file exists.
 if(fs.existsSync(__config.path.base + 'shared/app/private/bootstrapHelperAfter.js')){

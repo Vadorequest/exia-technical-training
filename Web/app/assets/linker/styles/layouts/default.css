@@ -31,6 +31,7 @@ body.layout_default #global > header {
   margin: 0;
   padding: 0;
   border-radius: 0;
+  z-index: 1000;
 }
 body.layout_default #global > header > div.navbar-header {
   height: 50px;
@@ -205,13 +206,6 @@ body.layout_default #left_navigation ul li a span.sub:after {
   -ms-transform: rotate(-45deg);
   transform: rotate(-45deg);
 }
-body.layout_default #left_navigation ul li a span.sub.resize {
-  width: 60%;
-}
-body.layout_default #left_navigation ul li a span:not(.sub).resize {
-  width: 25%;
-  opacity: 0;
-}
 body.layout_default #left_navigation ul li a:not(.sup):after {
   content: "";
   width: 100%;
@@ -241,11 +235,20 @@ body.layout_default #left_navigation > ul > li > ul > li:not(:first-child) > spa
 body.layout_default #left_navigation a.pointer-events {
   pointer-events: none;
 }
-body.layout_default > #left_navigation.resize,
-body.layout_default #left_navigation ul li ul.resize {
+body.layout_default #left_navigation.resize {
   width: 75px;
 }
-body.layout_default > #left_navigation.responsive {
+body.layout_default #left_navigation.resize ul li ul {
+  width: 75px;
+}
+body.layout_default #left_navigation.resize ul li a span.sub {
+  width: 60%;
+}
+body.layout_default #left_navigation.resize ul li a span:not(.sub) {
+  width: 25%;
+  opacity: 0;
+}
+body.layout_default #left_navigation.responsive {
   width: 55px !important;
 }
 body.layout_default div.panel.authentication {

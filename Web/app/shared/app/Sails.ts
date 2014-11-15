@@ -1,12 +1,12 @@
 ///<reference path='./lib/def/defLoader.d.ts'/>
 
-import cli = require('./../../shared/app/Cli');
+import cli = require('./Cli');
 var Cli = cli.Cli;
 
 /**
  * Tool to manage Sails tasks.
  */
-export class Sails{
+export class Sails {
 
     /**
      * Run sails.

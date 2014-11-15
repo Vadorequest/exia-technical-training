@@ -12,7 +12,7 @@ export class View {
      */
     public static template(template, data){
         // JST is only available client side.
-        return JST['assets/linker/templates/'+template+'.ejs']( data );
+        return JST[getPublicConfig().path.view.templates + template + '.ejs']( data );
     }
 
     /**

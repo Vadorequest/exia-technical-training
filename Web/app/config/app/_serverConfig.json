@@ -14,10 +14,15 @@
         "reloadCachedFilesFromGameOnStart": true
     },
     "path": {
+        "base": "__dynamic__",
         "config": {
             "app": "config/app/",
             "local": "config/local/",
             "shared": "shared/config/"
+        },
+        "languages": "config/locales/",
+        "view": {
+            "partials": "/_partials/"
         }
     },
     "db" : {

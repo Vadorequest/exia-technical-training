@@ -54,7 +54,7 @@
                 n: 'validator'// validator used by our Validator/__validator internally.
             },
             {
-                o: _appValidator.TranslateValidator,
+                o: _appValidator.AppValidator,
                 n: 'Validator'// Class to use specific to our app.
             },
             {
@@ -90,7 +90,7 @@
                 n: '__Dao'// Name exception. (Uppercase)
             },
             {
-                o: _appValidator.TranslateValidator,
+                o: _appValidator.AppValidator,
                 n: '__validator'// Validator to use in the application.
             },
             {

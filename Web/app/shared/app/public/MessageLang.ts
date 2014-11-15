@@ -4,7 +4,6 @@
  * @name MessageLang
  * @description Language message content class.
  * @author Vadorequest
- * TODO Add interface IMarkdownMessage, implement it. Also use new fields to know if the MessageLang was translated and "markdowned".
  */
 export class MessageLang{
 
@@ -20,35 +19,38 @@ export class MessageLang{
     public _message: any = '';
 
     /**
-     * Args of the message for complex messages.
+     * Variables used by the message, for complex messages only.
+     * These variables are contained inside the message itself using a very specific format, see the files containing languages.
      */
-    public _args: any = new Array();
+    public _variables: any = new Array();
 
     /**
      * Constructor for simple messages.
+     *
      * @param message   Error message.
-     * @param args      Arguments of the message.
+     * @param variables Variables of the message.
      */
-    constructor(message: string = '', args: any = new Array()){
+    constructor(message: string = '', variables: any = new Array()){
         this.setMessage(message);
-        this.setArgs(args);
+        this.setVariables(variables);
     }
 
     /**
-     * Returns the entire message, auto translate. Can use extra args and extra language.
-     * @param args      If set, will overload the args already used by the message but not change them.
-     * @param translate If true, the message will be translated using the global lang singleton instance object. TODO This doesn't work server side because lang has not been set at singleton there.
-     * @param language  Allows to use another language during the translation. Else, the default user language will be used.
+     * Returns the entire message, auto translate. Can use extra args and extra language. TODO Translate doesn't work server side because lang has not been set at singleton there.
+     *
+     * @param variables If set, will overload the variables by merging these variables with the variables already contained in the message but will not modify them, just use them this time.
+     * @param options   Contains options, such as the language to use, if markdown should be applied and so on.
      * @returns {string}
      */
-    public getMessage(args: any = new Array(), translate: boolean = true, language: string = null): string{
-        // If we want to translate and the Lang singleton is available. A global lang instance of Lang/__lang must be available.
-        if(typeof lang !== 'undefined' && translate){
-            if(language){
-                return lang.get(this._message, args.length > 0 ? args : this.getArgs(), language);
-            }else{
-                return lang.get(this._message, args.length > 0 ? args : this.getArgs());
-            }
+    public getMessage(options: any = {}, variables: any = false): string{
+        // Translate by default.
+        if(typeof options.translate === 'undefined'){
+            options.translate = true;
+        }
+
+        // If we want to translate and the if the "Lang" singleton is available. A global lang instance of Lang/__lang must be available.
+        if(typeof lang !== 'undefined' && options.translate){
+            return lang.get(this._message, options, variables ? _.merge(this.getVariables(), variables) : this.getVariables());
         }else{
             return this._message;
         }
@@ -66,24 +68,24 @@ export class MessageLang{
      * Return the message value.
      * @returns {*}
      */
-    public _getMessage(){
+    public _getMessage(): any{
         return this._message;
     }
 
     /**
-     * Args accessor.
+     * Variables accessor.
      * @returns {*}
      */
-    public getArgs(){
-        return this._args;
+    public getVariables(): Array<any>{
+        return this._variables;
     }
 
     /**
-     * Change the args.
-     * @param args
+     * Set the variables.
+     * @param variables
      */
-    public setArgs(args: any = new Array()){
-        this._args = args;
+    public setVariables(variables: any = new Array()){
+        this._variables = variables;
     }
 
     /**
@@ -92,7 +94,7 @@ export class MessageLang{
      */
     public isComplexMessage(): boolean{
         // If the message contains defined args then it's a custom message. Check for both length and keys because we can get both array and object.
-        return this.getArgs().length > 0 || Object.keys(this.getArgs()).length !== 0;
+        return this.getVariables().length > 0 || Object.keys(this.getVariables()).length !== 0;
     }
 
     /**
@@ -104,7 +106,7 @@ export class MessageLang{
 
         if(this.isComplexMessage()){
             json[MessageLang.FIELD_NAME_MESSAGE] = this._getMessage();
-            json[MessageLang.FIELD_NAME_ARGUMENTS] = this.getArgs();
+            json[MessageLang.FIELD_NAME_ARGUMENTS] = this.getVariables();
         }else{
             json = this._message
         }
@@ -120,6 +122,7 @@ export class MessageLang{
 
     /**
      * Create a new instance of MessageLang.
+     *
      * @param message   Error message.
      * @param args      Arguments of the message.
      * @returns {MessageLang}

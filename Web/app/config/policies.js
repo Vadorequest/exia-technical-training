@@ -1,5 +1,3 @@
-
-
 /**
  * Policy Mappings
  * (sails.config.policies)

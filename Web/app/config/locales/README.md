@@ -1,9 +1,12 @@
 # Internationalization / Localization Settings
 
-## Locale
+> Also see the official docs on internationalization/localization:
+> http://links.sailsjs.org/docs/config/locales
+
+## Locales
 All locale files live under `config/locales`. Here is where you can add locale data as JSON key-value pairs. The name of the file should match the language that you are supporting, which allows for automatic language detection based on the user request.
 
-Here is an example locale stringfile for the Spanish language (`config/locales/es.json`):  
+Here is an example locale string file for the Spanish language (`config/locales/es.json`):
 ```json
 {
     "Hello!": "Hola!",

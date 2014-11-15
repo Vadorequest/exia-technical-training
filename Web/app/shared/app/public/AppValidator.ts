@@ -3,9 +3,10 @@
 import _validator = require('./Validator');
 
 /**
- *
+ * Validator specific to this application.
+ * Shouldn't be shared with other applications
  */
-export class TranslateValidator extends _validator.Validator {
+export class AppValidator extends _validator.Validator {
 
     /**
      * ********************************************************************************

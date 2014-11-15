@@ -14,22 +14,19 @@ export class Lang {
     /**
      * Public server config.
      */
-    private _config;
+    private _config: any;
 
     /**
      * All languages with sentences.
+     * Initially based on the languages.json file but then get an extra field that contains an array of all sentences for every languages the user needs.
+     * Should be protected.
      */
-    private _languages;
+    public _languages: any;
 
     /**
-     * Main language for the user.
+     * Main language used by the application, used to fallback into this language when a sentence cannot be found.
      */
-    private _userDefaultLang: string;
-
-    /**
-     * Contains all languages in use by the user.
-     */
-    private _userLangs: any = new Array();
+    private _appDefaultLang: string;
 
     /**
      * Key of a message sentence, from the server config.
@@ -54,19 +51,19 @@ export class Lang {
     /**
      * Field where store the content of each language.
      */
-    private _FIELD_CONTENT_LANG: String = 'text';
+    private _FIELD_CONTENT_LANG: string = 'text';
 
     /**
      * Special field token. Must be included in all config language file to determine the language.
      */
-    private _FIELD_KEY_LANG: String = '__lang__';
+    private _FIELD_KEY_LANG: string = '__lang__';
 
     /**
      * Constants.
      */
-    private FIELD_NAME_MESSAGE = 'm';
-    private FIELD_NAME_ARGS = 'a';
-    private PATTERN_ARGS = '$';
+    private FIELD_NAME_MESSAGE: string = 'm';
+    private FIELD_NAME_ARGS: string = 'a';
+    private PATTERN_ARGS: string = '$';
 
     /**
      * Name of the singleton in windows[] object. Accessible once the class is initialized. [GLOBAL]
@@ -75,36 +72,40 @@ export class Lang {
 
     /**
      * Basically run the init method.
-     * @param serverConfig            The public server config.
+     *
+     * @param serverConfig      The public server config.
      * @param languages         The public JSON languages config file.
      * @param defaultLanguage   The public JSON language text file to use as default an main language.
-     * @param message           Instance of the Message class, for the communication.
+     * @param parse             Indicates if whether or not the language config file should be parsed or not.
+     * @param callback          Eventual callback to execute once the initialization is done.
      */
-    constructor(serverConfig: any, languages: any, defaultLanguage: any, parse: boolean = true){
+    constructor(serverConfig: any, languages: any, defaultLanguage: any, parse: boolean = true, callback?: any){
         // The default path are basically used only server side.
         var serverConfig: any = serverConfig || require('./../../config/serverConfig.json');
         var languages: any = languages || require('./../../app/public/languages/languages.json');
         var defaultLanguage: any = defaultLanguage || require('./../../app/public/languages/'+serverConfig.defaultLanguage+'.json');
         this._parse = parse;
 
-        this._initialize(serverConfig, languages, defaultLanguage);
+        this._initialize(serverConfig, languages, defaultLanguage, callback);
     }
 
     /**
      * Add a language to the languages used by the user.
+     *
      * @param lang          The lang to use. 2 characters.
-     * @param language      The language string to parse.
+     * @param language      The language string to parse, contains all sentences.
+     * @param force         If true, replace the language sentences.
      * @param callback      Callback to execute.
      * @returns {Message}   Instance of Message.
      */
-    public addLanguage(lang: String, language: any, callback: any = null): any{
+    public addLanguage(lang: string, language: any, force: boolean = false, callback: any = null): any{
+        // Check if the language is authorized.
         if(this._languages[lang]){
-            // Language authorized.
-            if(!this._languages[lang][this._FIELD_CONTENT_LANG]){
+            // Check if the language is already set, won't update it if it is already, excepted if we force it.
+            if(!this._languageIsSet(lang) || force){
                 try{
                     // Add the language texts to the language.
                     this._languages[lang][this._FIELD_CONTENT_LANG] = ((typeof language == 'string' && this._parse) ? JSON.parse(language) : language);
-                    this._userLangs.push(lang);
                 }catch(e){
                     consoleDev("Lang.addLanguage() Unable to parse the language JSON string." + e.message, 'error');
                 }
@@ -114,7 +115,7 @@ export class Lang {
                 if(callback){
                     // Call callback if exists.
                     callback(response);
-                };
+                }
 
                 // Return user confirmation.
                 return response;
@@ -125,7 +126,7 @@ export class Lang {
                 if(callback){
                     // Call callback if exists.
                     callback(response);
-                };
+                }
 
                 return response;
             }
@@ -135,7 +136,7 @@ export class Lang {
             if(callback){
                 // Call callback if exists.
                 callback(response);
-            };
+            }
 
             return response;
         }
@@ -143,70 +144,119 @@ export class Lang {
 
     /**
      * Get a sentence in a language. Use the main user language as default.
+     *
      * @param message               message of the sentence, should start by '__' but if there is no '__' they are automatically added. Could be a complex object with args.
-     * @param args                  Args used to replace the dynamics tags in the sentence, if they exists. Will replace the default tags.
-     * @param lang                  The lang to use. 2 characters. Will use as default the main user language.
+     * @param variables             If set, will overload the variables by merging these variables with the variables already contained in the message but will not modify them, just use them this time.
+     * @param options               Contains options, such as the language to use, if markdown should be applied and so on.
      * @returns {Message|string}    Will contains a string if there is no error. Contains a Message if there is.
      */
-    public get(message: string, args = false, lang: string = this._userDefaultLang): any{
+    public get(message: string, options: any = {}, variables: any = false): any{
+        // Apply markdown by default.
+        if(typeof options.markdown === 'undefined'){
+            options.markdown = true;
+        }
+
         // Check message.
         if(!this._checkMessageFormat(message)){
             // Don't try to translate. TODO Protect against injections? Maybe somewhere else, probably server side!
             return message;
         }
 
-        // Get the sentence from the file in the memory. TODO CHANGE MARKDOWN
-        var response: Message = this._getSentence(message, args, true, lang);
+        // Get the sentence from the file in the memory.
+        var response: Message = this._getSentence(message, options, variables);
 
         // If we got an object, it's a Message instance.
         if(response.isCustomMessage && response.getStatus()){
-            // Don't try to translate ^_^ (Infinite loop)
-            return response.getMessage(false);
+            // Success.
+            return response.getMessage({translate: false});// Don't try to translate again ^_^ (Infinite loop)
         }else if(response.isCustomMessage && !response.getStatus()){
-            // A new language is adding, in this case the user will be informed asynchronously.
-            // Don't try to translate ^_^ (Infinite loop)
-            return response.getMessage(false);
-        }else{
-            // Content found but refused.
-            return response;
+            // Failure - The id couldn't be found in any language.
+            return response.getMessage({translate: false});// Don't try to translate ^_^ (Infinite loop)
         }
     }
 
     /**
-     * Returns the default user language.
+     * Returns the default app language.
      * @returns {string}
      */
-    public getLang(){
-        return this._userDefaultLang;
+    public getAppDefaultLang(): string{
+        return this._appDefaultLang;
     }
 
     /**
-     * Returns all the user languages.
-     * @returns {Array}
+     * Returns the native user language based on the user config.
+     * @returns {string}
      */
-    public getLangs(){
-        return this._userLangs;
+    public getUserNativeLang(_default: string = null): string{
+        return this._getUserConfig('nativeLanguage', _default);
     }
 
     /**
-     * Returns all the foreigners languages in the order they was added. (Basically the preference order.)
+     * Returns the user languages, those he wants to be able to see and manage translations for.
      * @returns {Array}
      */
-    public getForeignLang(){
-        var langs = this.getLangs();
+    public getUserUsedLanguages(): Array<string>{
+        return this._getUserConfig('usedLanguages', new Array());
+    }
 
-        // Remove the main language.
-        langs.shift()
-
-        return langs;
+    /**
+     * Returns the default user language. Shortcut.
+     * @returns {string}
+     */
+    public getLang(_default = this.getAppDefaultLang()): string{
+        return this.getUserNativeLang(_default);
     }
 
     /**
      * Get the entire languages object with everything inside.
      * @returns {*}
      */
-    public getLanguages(){
+    public getLanguages(): any{
         return this._languages;
+    }
+
+    /**
+     * Load all the user languages.
+     *
+     * @param force             If true, then will reload the loaded languages sentences.
+     * @param reloadLanguages   If true, then will reload the language configuration file that contains languages. Not used yet. TODO Somehow allow to reload the languages.json file.
+     */
+    public loadAllLanguages(force: boolean = false, reloadLanguages: boolean = false){
+        _.each(this.getUserUsedLanguages(), function(language){
+            // If we force reload or if the language hasn't been added yet.
+            if(!this._languageIsSet(language) || force){
+                // Load the language file and add it to the global singleton lang instance.
+                this.requireLanguageFile(language, force);
+            }
+        }, this);
+    }
+
+    /**
+     * Send an async request to get a specific language file and then add it into the current lang singleton instance.
+     *
+     * @param lang      Short name of the language to load, 2 characters.
+     * @param force     If true, then will reload the loaded language sentences.
+     */
+    public requireLanguageFile(lang, force: boolean = false){
+        // Store it into a temp var because we won't have access to "this" inside the requireJs scope.
+        var keyLoadNewLanguage = this._config.keyLoadNewLanguage;
+
+        // Set the key defined in the application, it will be used as global reference to load the right file.
+        window[keyLoadNewLanguage] = lang;
+
+        require(['text!baseLanguage/' + lang + '.json', 'Lang', 'Message'], function(language, _lang, _message){
+            // Free the var.
+            delete window[keyLoadNewLanguage];
+
+            // Get the global lang instance.
+            var _lang = _lang.Lang.waitForInstanceSynch();
+
+            // Add the new language.
+            _lang.addLanguage(lang, language, force, function(message){
+                // Warn the user a new language has been added.
+                consoleDev(message.getMessage(), 'debug');
+            });
+        });
     }
 
     /**
@@ -218,13 +268,16 @@ export class Lang {
     /**
      * Initialize the language instance. (Singleton)
      * Parse the JSON strings and store results.
+     *
      * @param configServerPublic    The public server config.
      * @param languagesConfigFile   The public JSON languages config file.
      * @param defaultLanguageFile   The public JSON language text file to use as default an main language.
+     * @param callback              Eventual callback to execute once the initialization is done.
      * @private
-     * TODO Initialize the user language too, not only the default.
      */
-    private _initialize(configServerPublic: any, languagesConfigFile: any, defaultLanguageFile: any){
+    private _initialize(configServerPublic: any, languagesConfigFile: any, defaultLanguageFile: any, callback?: any){
+        var self = this;
+
         // Message will be provided by the loader. Will use default
         this._config = configServerPublic;
 
@@ -242,25 +295,37 @@ export class Lang {
             this._argsKey = configServerPublic.languages.argsKey;
             this._prefixMessageCode = configServerPublic.languages.prefixMessageCode;
 
-            // Get the default language identifier.
-            this._userDefaultLang = defaultLanguageFile[this._FIELD_KEY_LANG];
+            // Get the default language identifier, because the language provided during the initialization is always the default application language.
+            this._appDefaultLang = defaultLanguageFile[this._FIELD_KEY_LANG];
 
             // Add default language to the languages.
-            this.addLanguage(configServerPublic.defaultLanguage, defaultLanguageFile, function(message){
-                // Display the message but wait a bit before, because the global lang object isn't accessible at this very moment.
-                setTimeout(function(){
+            this.addLanguage(configServerPublic.defaultLanguage, defaultLanguageFile, false, function(message){
+                // Display the message but in the client we wait that the global lang object is accessible.
+                if(__config.target == 'browser'){
+                    __lang.waitForInstance(function(){
+                        consoleDev(message.getMessage());
+
+                        // Load the languages used by the user.
+                        self.loadAllLanguages();
+                    }, 1);
+                }else{
                     consoleDev(message.getMessage());
-                }, 2000);
+                }
+
+                if(callback){
+                    callback();
+                }
             });
 
         }catch(e){
-            consoleDev("Lang._initialize() Unable to parse the languages JSON.", 'error');
+            consoleDev("Lang._initialize() An error happened while parsing the languages JSON:", 'error');
             consoleDev(e.message, 'error');
         }
     }
 
     /**
      * Check if the language is set, so if the text of the language is already added.
+     *
      * @param lang          Lang to check. 2 characters.
      * @returns {boolean}
      * @private
@@ -275,6 +340,7 @@ export class Lang {
 
     /**
      * Check if the message is correctly formatted.
+     *
      * @param code            Code of the sentence.
      * @returns {boolean}
      * @private
@@ -285,97 +351,150 @@ export class Lang {
 
     /**
      * Get a sentence from the languages. If the language doesn't exists yet then import it but cannot send callback response yet.
+     *
      * @param id            Id of the sentence.
-     * @param args          Args to replace.
-     * @param _markdown     Format in markdown.
-     * @param lang          Lang to check. 2 characters.
+     * @param variables     If set, will overload the variables by merging these variables with the variables already contained in the message but will not modify them, just use them this time.
+     * @param options       Contains options, such as the language to use, if markdown should be applied and so on.
      * @returns {Message|null} If the language is already loaded then return a Message instance. If it has to be loaded, it will runs in an asynchronous request.
      * @private
+     *
+     * @Algorithm
+     * Check if the key exists in the targeted language. If so, use it.
+     * If not, check if the targeted language is the user native language.
+     * If not, check if the key exists in the native language.
+     * If not, check if the key exists in the default app language.
+     * If not, render the key.
      */
-    private _getSentence(id: string, args: any = false, _markdown = false, lang: string = this._userDefaultLang): Message{
-        var language = this._languages[lang];
+    private _getSentence(id: string, options: any = {}, variables: any = false): Message{
+        // Use default user language by default.
+        if(typeof options.language === 'undefined'){
+            options.language = this._appDefaultLang;
+        }
+
+        var languageSentences;
+        var sentence;
 
         // If the language exists and its text is set, get it.
-        if(this._languageIsSet(lang)){
-            // Get the sentence.
-            var sentence = language[this._FIELD_CONTENT_LANG][id];
+        if(this._languageIsSet(options.language)){
+            languageSentences = this._languages[options.language];
+            sentence = languageSentences[this._FIELD_CONTENT_LANG][id];
 
-            // If a sentence is found from this code.
             if(sentence){
-
-                // Replace all args by the values.
-                var message = this._replaceArgsInText(sentence, args, lang);
-
-                // Convert using markdown.
-                if(_markdown){
-                    message = markdown.toHTML(message);
-                }
-
-                return new __message(message, false, true);
-            }else{
-                // No sentence found with this code, return the code and the lang for debug/support.
-                return new __message('{' + id + '} ('+lang+')');
+                // We used the targeted language.
+                return this._transformSentence(sentence, options, variables);
             }
-        }else{
-            // Else require the script and return the sentence.
-            // Set the key defined in the application.
-            var _keyLoadNewLanguage = this._config.keyLoadNewLanguage;
-            window[_keyLoadNewLanguage] = lang;
-            require(['text!baseLanguage/'+lang+'.json', 'Lang', 'Message'], function(language, _lang, _message){
-                // Free the var.
-                delete window[_keyLoadNewLanguage];
-
-                // Get the global lang instance.
-                var __lang = _lang.Lang.waitForInstanceSynch();
-
-                // Add the new language.
-                __lang.addLanguage(lang, language, function(message){
-                    // Warn the user a new language has been added.
-                    consoleDev(message.getMessage());// TODO really warn the user.
-                });
-            });
-
-            return new __message('The language that you want to use was not in the browser cache. ' +
-                    'You will be notified when it will be correctly cached. Please perform again the operation if you want to see the message in this language.',
-                {lang: lang}, false);// Return false in this case.
         }
+
+        // Fallback 1 - User native language.
+        // Check if the targeted language is the user native language.
+        if(this.getUserNativeLang() !== options.language && this._languageIsSet(this.getUserNativeLang())){
+            options.language = this.getUserNativeLang();
+            languageSentences = this._languages[options.language];
+            sentence = languageSentences[this._FIELD_CONTENT_LANG][id];
+
+            if(sentence){
+                // We fallback into the user native language.
+                return this._transformSentence(sentence, options, variables);
+            }
+        }
+
+        // Fallback 2 - Default App language.
+        // Check if the key exists in the default app language.
+        if(this._languageIsSet(this.getAppDefaultLang())){
+            options.language = this.getAppDefaultLang();
+            languageSentences = this._languages[options.language];
+            sentence = languageSentences[this._FIELD_CONTENT_LANG][id];
+
+            if(sentence){
+                // We fallback into the app default language.
+                return this._transformSentence(sentence, options, variables);
+            }
+        }
+
+        // Fallback 3 - No solution.
+        // No sentence found with this code, return the code for debug/support.
+        return new __message(id);
+    }
+
+    /**
+     * Transform a sentence by generating variables and applying eventual options, like markdown.
+     *
+     * @param sentence      Sentence to transform.
+     * @param options       Options. (markdown)
+     * @param variables     Variables in the sentence to inject.
+     * @returns {Message}
+     * @private
+     */
+    private _transformSentence(sentence: string, options: any = {}, variables: any = false): Message{
+        // Apply markdown by default.
+        if(typeof options.markdown === 'undefined'){
+            options.markdown = true;
+        }
+
+        // Replace all args by the values.
+        var message = this._replaceVariablesInText(sentence, variables, options.language);
+
+        // Convert using markdown.
+        if(options.markdown){
+            // Delete the fucking <p> tag around the text, we don't want that.
+            message = markdown.toHTML(message).replace(/<\/?p>/ig, '');
+        }
+
+        return new __message(message, false, true);
     }
 
     /**
      * Replace the tags in the text by the args.
+     *
      * @param message      The message.
-     * @param args          The args to replace in the message.
-     * @returns {string}    The string built.
+     * @param variables    The variables to replace in the message.
+     * @param lang         Lang used, 2 characters.
+     * @returns {string}   The string built.
      * @private
      */
-    private _replaceArgsInText(message: any, args: any, lang: string): string{
-        for(var i in args){
-            message = message.split(((i.charAt(0) !== this.PATTERN_ARGS ? this.PATTERN_ARGS : '') + i)).join(args[i]);
+    private _replaceVariablesInText(message: any, variables: any, lang: string): string{
+        for(var i in variables){
+            // TODO Explain what it does, because I'm like O_o here. But it works fine => I'm a genius and I didn't know it.
+            message = message.split(((i.charAt(0) !== this.PATTERN_ARGS ? this.PATTERN_ARGS : '') + i)).join(variables[i]);
         }
 
         // Check if some of the args was other language keys.
-        return this._replaceSubKeys(this, message, args, /__\w+/g, this._languages[lang][this._FIELD_CONTENT_LANG], lang);
+        return this._replaceSubKeys(this, message, variables, /__\w+/g, this._languages[lang][this._FIELD_CONTENT_LANG], lang);
     }
 
     /**
      * Replace the sub keys into the sentence by the actual text.
-     * @param self
-     * @param sentence
-     * @param rx
-     * @param array
-     * @param lang
+     *
+     * @param self      Lang instance.
+     * @param sentence  Sentence where to replace sub keys.
+     * @param variables The variables to replace in the message.
+     * @param regex     Regex to apply.
+     * @param array     Array containing the language sentences.
+     * @param lang      Lang to apply
      * @returns {string|void}
      * @private
      */
-    private _replaceSubKeys(self: Lang, sentence, args, rx, array, lang): string{
-        return sentence.replace(rx, function(i) {
+    private _replaceSubKeys(self: Lang, sentence, variables, regex, array, lang): string{
+        return sentence.replace(regex, function(i) {
             if(array[i]){
-                var message = new Message(array[i], args);
-                return self._replaceArgsInText(message.getMessage(), args, lang);
+                var message = new Message(array[i], variables);
+                return self._replaceVariablesInText(message.getMessage(), variables, lang);
             }else{
                 return (dev()? i+' doesn\'t exists in '+lang : '');
             }
         });
+    }
+
+    /**
+     * Retrieves the user config key or a default value if not set.
+     *
+     * @param key           Key to retrieve.
+     * @param _default      Default value to return if the key doesn't exist.
+     * @returns {any}
+     * @private
+     */
+    private _getUserConfig(key: string, _default?: any){
+        return this._config.user && typeof this._config.user[key] !== 'undefined' ? this._config.user[key] : _default;
     }
 
     /**
@@ -388,11 +507,11 @@ export class Lang {
      * Use this function when you need to load the global "lang" on document DOM loading. Asynch.
      * @returns {*}
      */
-    public static waitForInstance(callback){
+    public static waitForInstance(callback, timeout: number = 50){
         if(!window[Lang.FIELD_NAME_SINGLETON]){
             window.setTimeout(function(){
                 Lang.waitForInstance(callback)
-            }, 50);
+            }, timeout);
         }else{
             callback(window[Lang.FIELD_NAME_SINGLETON]);
         }
@@ -402,11 +521,11 @@ export class Lang {
      * Use this function when you need to load the global "lang" on document DOM loading. Synch.
      * @returns {*}
      */
-    public static waitForInstanceSynch(){
+    public static waitForInstanceSynch(timeout: number = 50){
         if(!window[Lang.FIELD_NAME_SINGLETON]){
             window.setTimeout(function(){
                 Lang.waitForInstanceSynch()
-            }, 50);
+            }, timeout);
         }else{
             return window[Lang.FIELD_NAME_SINGLETON];
         }

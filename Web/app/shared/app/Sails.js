@@ -1,16 +1,15 @@
 ///<reference path='./lib/def/defLoader.d.ts'/>
-define(["require", "exports", './../../shared/app/Cli'], function(require, exports, cli) {
+define(["require", "exports", './Cli'], function (require, exports, cli) {
     var Cli = cli.Cli;
-
     /**
-    * Tool to manage Sails tasks.
-    */
+     * Tool to manage Sails tasks.
+     */
     var Sails = (function () {
         function Sails() {
         }
         /**
-        * Run sails.
-        */
+         * Run sails.
+         */
         Sails.lift = function () {
             Cli.windows('cd webservice && sails lift', [], function (command, args) {
                 console.log('Sails webservice is starting...');

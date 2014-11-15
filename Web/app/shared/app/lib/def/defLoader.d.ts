@@ -5,7 +5,6 @@
 ///<reference path='./colpick.d.ts'/>
 ///<reference path='./express.d.ts'/>
 ///<reference path='./JQuery.d.ts'/>
-///<reference path='./lib.d.ts'/>
 ///<reference path='./mongodb.d.ts'/>
 ///<reference path='./mongoose.d.ts'/>
 ///<reference path='./node.d.ts'/>

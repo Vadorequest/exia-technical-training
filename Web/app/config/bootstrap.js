@@ -7,6 +7,8 @@
  *
  * For more information on bootstrapping your app, check out:
  * http://sailsjs.org/#/documentation/reference/sails.config/sails.config.bootstrap.html
+ *
+ * Is executed after the boostrapHelper is executed.
  */
 
 module.exports.bootstrap = function (cb) {
@@ -23,8 +25,13 @@ module.exports.bootstrap = function (cb) {
      * @static lang         Singleton instance of the Lang class to manage languages in the application.
      * @static __validator  Validator specific to this application.
      */
+    // Create a lang singleton that is used to deal with all translations within the application on the server side.
     lang = new __lang(__config.public, require('./../config/locales/languages.json'), require('./../config/locales/' + __config.public.defaultLanguage + '.json'));// Singleton.
-    __validator = requireJs('./public/TranslateValidator').TranslateValidator;
+
+    // Load all languages, server side only.
+    lang.loadAllLanguages();
+
+    __validator = requireJs('./public/AppValidator').AppValidator;
 
     /**
      * Create all global vars for our own libraries.

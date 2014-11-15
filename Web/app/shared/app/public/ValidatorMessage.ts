@@ -34,6 +34,7 @@ export class ValidatorMessage extends message.Message implements message.IMessag
 
     /**
      * Constructor.
+     *
      * @param errors    String, ValidatorErrorMessageLang or array of errors.
      * @param data      Data useful for callback, can be anything.
      * @param status    Status of the message.
@@ -73,17 +74,20 @@ export class ValidatorMessage extends message.Message implements message.IMessag
 
     /**
      * Add an error in the validator errors array.
+     *
      * @param message   Error message. Can be string if simple message of object if complex message with variable arguments.
      * @param key       Key of the error. {pseudo, email, etc.}
      * @param args      Args of the message.
      */
-    public addError(message: string, key: string = '', args: any = new Array()){
+    public addError(message: string, key: string = '', args: any = new Array()): ValidatorMessage{
         if(message){
             this._errors.push(new ValidatorErrorMessageLang(message, args, key));
             this._status = false;
         }else{
-            consoleDev("ValidatorMessage.addValidationError: Unable to add a ValidatorErrorMessageLang object into the array of errors. (Field empty) \nmessage:" + message);
+            consoleDev("ValidatorMessage.addError: Unable to add a ValidatorErrorMessageLang object into the array of errors. (Field empty) \nmessage:" + message);
         }
+
+        return this;
     }
 
     /**
@@ -138,25 +142,27 @@ export class ValidatorMessage extends message.Message implements message.IMessag
     /**
      * Returns the first error of the errors list.
      * Helper for Message compatibility.
+     *
+     * @param options   Contains options, such as the language to use, if markdown should be applied and so on.
+     * @param variables If set, will overload the variables by merging these variables with the variables already contained in the message but will not modify them, just use them this time.
      * @returns {string}
      */
-    public getMessage(args: any = new Array(), translate: boolean = true, language: string = null): string{
-        return this._getFirstError().getMessage(args, translate, language);
+    public getMessage(options: any = {}, variables: any = false): string{
+        return this._getFirstError().getMessage(options, variables);
     }
 
     /**
      * Returns all messages, concatenated.
      *
-     * @param separator
-     * @param args      If set, will overload the args already used by the message but not change them.
-     * @param translate If true, the message will be translated using the global lang instance object.
-     * @param language  Allows to use another language during the translation. Else, the default user language will be used.
+     * @param options   Contains options, such as the language to use, if markdown should be applied and so on.
+     * @param variables If set, will overload the variables by merging these variables with the variables already contained in the message but will not modify them, just use them this time.
+     * @param separator Separator to use between sentences.
      * @return {string}
      */
-    public getAllMessages(separator: string = '', args: any = new Array(), translate: boolean = true, language: string = null): string{
+    public getAllMessages(options: any = {}, variables: any = false, separator: string = ''): string{
         var msg = '';
         _.map(this._errors, function(validatorMessage: ValidatorMessage){
-            msg += validatorMessage.getMessage(args, translate, language) + separator;
+            msg += validatorMessage.getMessage(options, variables) + separator;
         });
 
         return msg;
@@ -173,6 +179,7 @@ export class ValidatorMessage extends message.Message implements message.IMessag
 
     /**
      * Returns a custom object without method using the predefined FIELD_NAME to take less space once converted in JSON string.
+     *
      * @returns {{}}
      * @private
      */
@@ -210,6 +217,7 @@ export class ValidatorMessage extends message.Message implements message.IMessag
 
     /**
      * Auto detect the instance type and return an adapted object.
+     *
      * @param json  Json to convert to object.
      */
     public static create(json): message.IMessage{
@@ -219,6 +227,7 @@ export class ValidatorMessage extends message.Message implements message.IMessag
 
     /**
      * Convert JSON to a ValidatorMessage object instance.
+     *
      * @param json  Json to convert to object.
      * @returns {Message}
      */
@@ -234,6 +243,7 @@ export class ValidatorMessage extends message.Message implements message.IMessag
 
     /**
      * Convert JSON object to a ValidatorMessage object instance.
+     *
      * @param json  Json to convert to object.
      * @returns {ValidatorMessage}
      * @private
@@ -248,6 +258,7 @@ export class ValidatorMessage extends message.Message implements message.IMessag
 
     /**
      * Convert JSON string to a ValidatorMessage object instance.
+     *
      * @param json  Json to convert to object.
      * @returns {ValidatorMessage}
      * @private
@@ -261,6 +272,8 @@ export class ValidatorMessage extends message.Message implements message.IMessag
  * @name ValidatorErrorMessageLang
  * @description Validator error class, based on MessageLang class.
  * @author Vadorequest
+ *
+ * This class is used only by this file, nowhere else. So it makes sense and makes things easier to just have it here.
  */
 export class ValidatorErrorMessageLang extends messageLang.MessageLang{
     /**
@@ -277,6 +290,7 @@ export class ValidatorErrorMessageLang extends messageLang.MessageLang{
 
     /**
      * Constructor.
+     *
      * @param key       Key of the error. {pseudo, email, etc.}
      * @param args      Arguments of the error. Used only for complex errors.
      * @param message   Error message. Can be string if simple message of object if complex message with variable arguments.
@@ -310,7 +324,7 @@ export class ValidatorErrorMessageLang extends messageLang.MessageLang{
         if(this.isComplexMessage()){
             json[ValidatorErrorMessageLang.FIELD_NAME_MESSAGE] = {};
             json[ValidatorErrorMessageLang.FIELD_NAME_MESSAGE][ValidatorErrorMessageLang.FIELD_NAME_SUB_MESSAGE] = this._message;
-            json[ValidatorErrorMessageLang.FIELD_NAME_MESSAGE][ValidatorErrorMessageLang.FIELD_NAME_SUB_ARGUMENTS] = this._args;
+            json[ValidatorErrorMessageLang.FIELD_NAME_MESSAGE][ValidatorErrorMessageLang.FIELD_NAME_SUB_ARGUMENTS] = this._variables;
         }else{
             json[ValidatorErrorMessageLang.FIELD_NAME_MESSAGE] = this._message
         }

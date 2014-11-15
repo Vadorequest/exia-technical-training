@@ -24,7 +24,17 @@ function notification(text, options: any = {}, time_out = 0){
         spacing: 10,
         z_index: 5000,
         delay: 5000,
-        mouse_over: 'pause'
+        mouse_over: 'pause',
+        template:
+        '<div data-growl="container" class="alert growl" role="alert">' +
+            '<button type="button" class="close" data-growl="dismiss">' +
+                '<span aria-hidden="true">×</span>' +
+                '<span class="sr-only">Close</span>' +
+            '</button>' +
+            '<span class="title" data-growl="title"></span>' +
+            '<span class="message" data-growl="message"></span>' +// Contains both the image and text in our case. See code below.
+            '<a href="#" data-growl="url"></a>' +
+        '</div>'
     };
 
     // Auto-correct the 'error' type into 'danger' to simplify the use.

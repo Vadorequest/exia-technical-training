@@ -50,7 +50,7 @@ var _requireJs: any = {
             'Format': '../shared/Format.min',
             'Dao': '../shared/DaoPublic.min',
             'Validator': '../shared/Validator.min',
-            'TranslateValidator': '../shared/TranslateValidator.min',
+            'AppValidator': '../shared/AppValidator.min',
             'View': '../shared/View.min',
 
             /*
@@ -88,7 +88,7 @@ var _requireJs: any = {
             'Validator': {
                 deps: ["Message", "ValidatorMessage", "validator-extended", "Format", "Dao"]
             },
-            'TranslateValidator': {
+            'AppValidator': {
                 deps: ["Validator", "Dao"]
             }
         }
@@ -105,21 +105,21 @@ requirejs(
     [
         'validator-extended',
         'text!languages.json', 'text!defaultLanguage.json',
-        'Lang', 'MessageLang', 'Message', 'ValidatorMessage', 'Format', 'Dao', 'Validator', 'TranslateValidator', 'View',
+        'Lang', 'MessageLang', 'Message', 'ValidatorMessage', 'Format', 'Dao', 'Validator', 'AppValidator', 'View',
         'InitDefault',
         'domReady', 'text', "markdown",
     ],
     (
         _validatorExtended,
         _languages, _defaultLanguage,
-        _lang, _messageLang, _message, _validatorMessage, _format, _Dao, _validator, _translateValidator, _view,
+        _lang, _messageLang, _message, _validatorMessage, _format, _Dao, _validator, _appValidator, _view,
         _init,
         _domReady, _text, _markdown
     )
     // All the previous variables will be accessible here, all these scripts are loaded!
     => {
         // Export all the common classes, common to all loaders.
-        Loader.export(_lang, _messageLang, _message, _validatorMessage, _format, _Dao, _validatorExtended, _translateValidator, _view);
+        Loader.export(_lang, _messageLang, _message, _validatorMessage, _format, _Dao, _validatorExtended, _appValidator, _view);
 
         // Initialization.
         var init = new _init.InitDefault(__config, _languages, _defaultLanguage);

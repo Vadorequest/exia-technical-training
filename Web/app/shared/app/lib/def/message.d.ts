@@ -2,7 +2,8 @@
 
 interface IMessage{
     isCustomMessage: boolean;
-    getMessage(args: any, translate: boolean, language: string): string;
+    getMessage(options?: any, variables?: any): string;
+    getAllMessages(options?: any, variables?: any, separator?: string): string;
     getData(): any;
     getStatus(): boolean;
     getType(): string;
@@ -27,11 +28,11 @@ declare class Message implements IMessage{
 
     constructor(message?: any, data?: any, status?: boolean, typeMessage?);
 
-    public getMessage(args?: any, translate?: boolean, language?: string): string;
-    public getAllMessages(separator?: string, args?: any, translate?: boolean, language?: string): string;
+    public getMessage(options?: any, variables?: any): string;
+    public getAllMessages(options?: any, variables?: any, separator?: string): string;
     public hasMessage(): boolean;
     public getMessageLang(): MessageLang;
-    public setMessageLang(message: any, args?: any): Message;
+    public setMessageLang(message: any, variables?: any): Message;
     public getData(): any;
     public getDataByKey(key: string, defaultValue?: any): any;
     public keyExists(key: string): boolean;

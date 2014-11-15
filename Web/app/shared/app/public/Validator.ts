@@ -197,7 +197,7 @@ export class Validator {
      * @param       model       If true then the key will be put inside the keysModelChecked object.
      * @returns {{value: *, key: string, model: boolean, rules: *[]}}
      */
-    public static rulesFolderName(value: string, key: string = 'folderName', minLength: number = __config.validator.folder.minLength, maxLength: number = __config.validator.folder.maxLength, model: boolean = false){
+    public static rulesFolderName(value: string, key: string = 'folderName', minLength: number = getPublicConfig().validator.folder.minLength, maxLength: number = getPublicConfig().validator.folder.maxLength, model: boolean = false){
         return {
             value: value,
             key: key,
@@ -233,7 +233,7 @@ export class Validator {
      * @param       model       If true then the key will be put inside the keysModelChecked object.
      * @returns {{value: *, key: string, model: boolean, rules: *[]}}
      */
-    public static rulesResourceName(value: string, key: string = 'resourceName', minLength: number = __config.validator.resource.minLength, maxLength: number = __config.validator.resource.maxLength, model: boolean = false){
+    public static rulesResourceName(value: string, key: string = 'resourceName', minLength: number = getPublicConfig().validator.resource.minLength, maxLength: number = getPublicConfig().validator.resource.maxLength, model: boolean = false){
         return {
             value: value,
             key: key,
@@ -269,7 +269,7 @@ export class Validator {
      * @param       maxLength   Maximum length required.
      * @returns {{value: *, key: string, model: boolean, rules: *[]}}
      */
-    public static rulesFilename(value: string, key: string = 'filename', minLength: number = __config.validator.filename.minLength, maxLength: number = __config.validator.filename.maxLength, model: boolean = false){
+    public static rulesFilename(value: string, key: string = 'filename', minLength: number = getPublicConfig().validator.filename.minLength, maxLength: number = getPublicConfig().validator.filename.maxLength, model: boolean = false){
         return {
             value: value,
             key: key,
@@ -329,7 +329,7 @@ export class Validator {
      * @param       maxLength   Maximum length required.
      * @returns     {{value: *, key: string, rules: Array}}
      */
-    public static rulesId(value: string, key: any = null, message: string = null, minLength: number = __config.validator.mongoDbId.minLength, maxLength: number = __config.validator.mongoDbId.maxLength){
+    public static rulesId(value: string, key: any = null, message: string = null, minLength: number = getPublicConfig().validator.mongoDbId.minLength, maxLength: number = getPublicConfig().validator.mongoDbId.maxLength){
         return {
             value: value,
             key: key ? key : false,// Don't link to the model if the key is not defined.
@@ -358,7 +358,7 @@ export class Validator {
      * @param       value {int}
      * @returns     {{value: *, key: *, rules: Array}}
      */
-    public static rulesLimit(value: number, min: number = __config.validator.limit.minLength){
+    public static rulesLimit(value: number, min: number = getPublicConfig().validator.limit.minLength){
         return {
             value: value,
             key: 'limit',
@@ -491,7 +491,7 @@ export class Validator {
      * @param       model       If true then the key will be put inside the keysModelChecked object. [true]
      * @returns {{value: *, key: string, model: boolean, rules: *[]}}
      */
-    public static rulesLanguageCode(value: string, key: string = 'code', minLength = __config.validator.languageCode.minLength, maxLength = __config.validator.languageCode.maxLength, model: boolean = true){
+    public static rulesLanguageCode(value: string, key: string = 'code', minLength = getPublicConfig().validator.languageCode.minLength, maxLength = getPublicConfig().validator.languageCode.maxLength, model: boolean = true){
         return {
             value: value,
             key: key,

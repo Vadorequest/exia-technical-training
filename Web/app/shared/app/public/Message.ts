@@ -6,7 +6,8 @@ import messageLang = require('./MessageLang');
 
 export interface IMessage{
     isCustomMessage: boolean;
-    getMessage(args: any, translate: boolean, language: string): string;
+    getMessage(options?: any, args?: any): string;
+    getAllMessages(options?: any, args?: any, separator?: string): string;
     getData(): any;
     getStatus(): boolean;
     getType(): string;
@@ -39,9 +40,16 @@ export class Message implements IMessage{
     /**
      * Instance variables.
      */
+    // The message itself, stored as a MessageLang to deal with complex messages.
     public _message: messageLang.MessageLang;
+
+    // Additional data.
     public _data: any;
+
+    // Status. If true then success, if false then failure.
     public _status: boolean;
+
+    // Type of the message, used to get to know what kind of message we are dealing with when using the Message.create() method so we can build the exact same object from JSON.
     public _typeMessage: string = Message.TYPE_MESSAGE;
 
     /**
@@ -90,6 +98,8 @@ export class Message implements IMessage{
             // Load the complex instance.
             this._message = message;
         }
+
+        // Set the other attributes.
         this._data = data;
         this._status = status;
         this._typeMessage = typeMessage;
@@ -98,33 +108,29 @@ export class Message implements IMessage{
     /**
      * Returns the entire message, auto translate. Can use extra args and extra language.
      *
-     * @param args      If set, will overload the args already used by the message but not change them.
-     * @param translate If true, the message will be translated using the global lang instance object.
-     * @param language  Allows to use another language during the translation. Else, the default user language will be used.
-     *
+     * @param options   Contains options, such as the language to use, if markdown should be applied and so on.
+     * @param variables If set, will overload the variables by merging these variables with the variables already contained in the message but will not modify them, just use them this time.
      * @returns {string}
      */
-    public getMessage(args: any = new Array(), translate: boolean = true, language: string = null): string{
-        return this._message.getMessage(args, translate, language);
+    public getMessage(options: any = {}, variables: any = false): string{
+        return this._message.getMessage(options, variables);
     }
 
     /**
      * Returns all messages, concatenated.
      * Not useful in this class, but it is with extended classes that can contain several messages.
      *
-     * @param separator
-     * @param args      If set, will overload the args already used by the message but not change them.
-     * @param translate If true, the message will be translated using the global lang instance object.
-     * @param language  Allows to use another language during the translation. Else, the default user language will be used.
+     * @param options   Contains options, such as the language to use, if markdown should be applied and so on.
+     * @param variables If set, will overload the variables by merging these variables with the variables already contained in the message but will not modify them, just use them this time.
+     * @param separator Separator to use between sentences.
      * @return {string}
      */
-    public getAllMessages(separator: string = '', args: any = new Array(), translate: boolean = true, language: string = null): string{
-        return this.getMessage(args, translate, language);
+    public getAllMessages(options: any = {}, variables: any = false, separator: string = ''): string{
+        return this.getMessage(options, variables);
     }
 
     /**
      * Determines if the Message contains a message.
-     *
      * @returns {boolean}
      */
     public hasMessage(): boolean{
@@ -133,7 +139,6 @@ export class Message implements IMessage{
 
     /**
      * Returns the current configured message.
-     *
      * @returns {MessageLang}
      */
     public getMessageLang(): messageLang.MessageLang{
@@ -145,22 +150,20 @@ export class Message implements IMessage{
      * Can be used once the message was created, to change the message without change the arguments, for instance.
      *
      * @param message   Message, can be a string or an instance of MessageLang.
-     * @param args      If message is a string then you can pass args. If no args then will use the args from the current message.
-     *
-     * @return {Message}
+     * @param variables If message is a string then you can pass args. If no args then will use the args from the current message.
+     * @returns {Message}
      */
-    public setMessageLang(message: any, args?: any): Message{
+    public setMessageLang(message: any, variables?: any): Message{
         if( message instanceof messageLang.MessageLang){
             this._message = message;
         }else{
-            this._message = new messageLang.MessageLang(message, args ? args : this._message._args);
+            this._message = new messageLang.MessageLang(message, variables ? variables : this._message._variables);
         }
         return this;
     }
 
     /**
      * Get message data.
-     *
      * @returns {*}
      */
     public getData(): any{
@@ -169,7 +172,6 @@ export class Message implements IMessage{
 
     /**
      * Get a data by key.
-     *
      * @returns {*}
      * TODO Improve the system with strings separated by dot to retrieve data from sub data.
      */
@@ -185,7 +187,6 @@ export class Message implements IMessage{
      * Check if the key exists in the data.
      *
      * @param key           Key to check.
-     *
      * @returns {boolean}
      * TODO Improve the system with strings separated by dot to check data from sub data.
      */
@@ -205,7 +206,6 @@ export class Message implements IMessage{
 
     /**
      * Get message status.
-     *
      * @returns {boolean}
      */
     public getStatus(): boolean{
@@ -214,7 +214,6 @@ export class Message implements IMessage{
 
     /**
      * Get type of the message.
-     *
      * @returns {string}
      */
     public getType(): string{
@@ -225,7 +224,6 @@ export class Message implements IMessage{
      * Set type of the message.
      *
      * @param   typeMessage
-     *
      * @returns {Message}
      */
     public setType(typeMessage: string): Message{
@@ -268,7 +266,6 @@ export class Message implements IMessage{
 
     /**
      * Returns the current object as JSON string.
-     *
      * @returns {string}
      */
     public toJSON(): string{
@@ -277,7 +274,6 @@ export class Message implements IMessage{
 
     /**
      * Returns the current object without methods.
-     *
      * @returns {Object}
      */
     public toObject(): any{
@@ -330,7 +326,6 @@ export class Message implements IMessage{
      * Convert JSON to a Message object instance.
      *
      * @param json  Json to convert to object.
-     *
      * @returns {Message.Message}
      */
     public static fromJSON(json): IMessage{
@@ -363,7 +358,6 @@ export class Message implements IMessage{
      * Convert JSON string to a Message object instance.
      *
      * @param json  Json to convert to object.
-     *
      * @returns {Message.Message}
      * @private
      */

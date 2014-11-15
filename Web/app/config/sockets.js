@@ -119,7 +119,7 @@ module.exports.sockets = {
    * a connection upgrade request WITHOUT A COOKIE (for certain transports)   *
    * In this case, there is no way to keep track of the requesting user       *
    * between requests, since there is no identifying information to link      *
-   * him/her with a session. The sails.io.js client solves this by connecting *
+   * him/her with a session. The socket-extended.js client solves this by connecting *
    * to a CORS endpoint first to get a 3rd party cookie (fortunately this     *
    * works, even in Safari), then opening the connection.                     *
    *                                                                          *
@@ -143,15 +143,15 @@ module.exports.sockets = {
   *        // to prevent the connection, call `cb(null, false)`              *
   *        // to report an error, call `cb(err)`                             *
   *     }                                                                    *
-   *                                                                          *
-   ***************************************************************************/
+  *                                                                          *
+  ***************************************************************************/
 
   // authorization: false,
 
   /***************************************************************************
    *                                                                          *
    * Whether to run code which supports legacy usage for connected sockets    *
-   * running the v0.9 version of the socket client SDK (i.e. sails.io.js).    *
+   * running the v0.9 version of the socket client SDK (i.e. socket-extended.js).    *
    * Disabled in newly generated projects, but enabled as an implicit default *
    * (i.e. legacy usage/v0.9 clients be supported if this property is set to  *
    * true, but also if it is removed from this configuration file or set to   *
@@ -164,7 +164,7 @@ module.exports.sockets = {
   /***************************************************************************
    *                                                                          *
    * Whether to expose a 'get /__getcookie' route with CORS support that sets *
-   * a cookie (this is used by the sails.io.js socket client to get access to *
+   * a cookie (this is used by the socket-extended.js socket client to get access to *
    * a 3rd party cookie and to enable sessions).                              *
    *                                                                          *
    * Warning: Currently in this scenario, CORS settings apply to interpreted  *
