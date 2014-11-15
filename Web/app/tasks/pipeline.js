@@ -33,7 +33,7 @@ var jsFilesToInjectBefore = [
 
     // Bring in the socket.io client
     'js/lib/socket.io.js',
-    'js/lib/sails.io.js',
+    'js/lib/socket-extended.js',
     'js/lib/lodash.js',
     'js/lib/app.js',
     'js/lib/validator-extended.js',
