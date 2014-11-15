@@ -1,8 +1,9 @@
 ///<reference path='./../../defLoader.d.ts' />
 
 /**
- * References its own classes.
+ * References its own classes, but not the engine.
  */
-///<reference path='./../Engine.ts'/>
 ///<reference path='./../Layer.ts'/>
 ///<reference path='./../Sprite.ts'/>
+///<reference path='./../Texture.ts'/>
+///<reference path='./../TilingSprite.ts'/>

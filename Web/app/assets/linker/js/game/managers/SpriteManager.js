@@ -1,6 +1,6 @@
 ///<reference path='./../defLoader.d.ts' />
+///<reference path='./../core/def/defLoader.d.ts'/>
 ///<reference path='./Manager.ts'/>
-///<reference path='./../core/Sprite.ts'/>
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -20,31 +20,14 @@ var Game;
                 _super.apply(this, arguments);
             }
             /**
-             * Return a sprite indexed by the key.
+             * Create a Tiling sprite.
              *
-             * @param key
-             * @returns {Sprite}
+             * @param texture
+             * @param width
+             * @param height
              */
-            SpriteManager.prototype.get = function (key) {
-                return typeof this._sprites[key] !== void 0 ? this._sprites[key] : null;
-            };
-            /**
-             * Add a sprite, indexed by the key.
-             *
-             * @param key
-             * @param sprite
-             * @returns {Game.Managers.SpriteManager}
-             */
-            SpriteManager.prototype.add = function (key, sprite) {
-                this._sprites[key] = sprite;
-                return this;
-            };
-            /**
-             * Destroy all registered sprites the hard way.
-             */
-            SpriteManager.prototype.destroy = function () {
-                this._sprites = [];
-                return this;
+            SpriteManager.prototype.createTiling = function (name, texture, width, height) {
+                return this.add(name, Game.Core.TilingSprite).get(name);
             };
             return SpriteManager;
         })(Game.Managers.Manager);

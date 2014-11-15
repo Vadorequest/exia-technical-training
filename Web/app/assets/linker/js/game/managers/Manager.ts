@@ -12,19 +12,49 @@ module Game.Managers {
     }
 
     /**
-     * I'm not sure this is useful, it would probably be better to implement the interface
-     * without inheritance since there aren't any shared method here.
+     * Provide a set of common methods that can be overridden by any child.
      */
     export class Manager{
-        public get(key: string){
-            return null;
+        /**
+         * Elements that are managed by the manager.
+         */
+        private _elements: PIXI.DisplayObject[];
+
+        /**
+         * Return an element indexed by its name.
+         *
+         * @param name
+         * @returns {*}
+         */
+        public get(name: string): any{
+            return typeof this._elements[name] !== void 0 ? this._elements[name] : null;
         }
 
-        public add(key: string, sprite): Manager{
+        /**
+         * Add an element, indexed by its name.
+         *
+         * @param name
+         * @param element
+         * @returns {Game.Managers.Manager}
+         */
+        public add(name: string, element): Manager{
+            // If the element doesn't already have a name then add one.
+            if(typeof element.__name !== void 0){
+                element.__name = name;
+            }
+
+            // Add the element to the array of managed objects.
+            this._elements[name] = element;
+
             return this;
         }
 
-        public destroy(): Manager{
+        /**
+         * Destroy all registered elements the hard way.
+         */
+        public destroy(){
+            this._elements = [];
+
             return this;
         }
     }

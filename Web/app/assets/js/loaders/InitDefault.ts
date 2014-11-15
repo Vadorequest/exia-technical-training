@@ -3,10 +3,7 @@
 
 import init = require("Init");
 
-declare var stage: PIXI.Stage;
-declare var renderer: PIXI.IPixiRenderer;
-declare var farSprite: PIXI.TilingSprite;
-declare var midSprite: PIXI.TilingSprite;
+declare var Game: any;
 
 /**
  * Init the view/main.
@@ -24,6 +21,6 @@ export class InitDefault extends init.Init{
         super(config, languages, defaultLanguage);
 
         // Starts the game.
-        Game.Core.Engine.initialize();
+        Game.Core.Engine.initialize(PIXI);
     }
 }

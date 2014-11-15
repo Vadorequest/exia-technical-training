@@ -1,5 +1,5 @@
 ///<reference path='./../defLoader.d.ts' />
-///<reference path='./Layer.ts'/>
+///<reference path='./../managers/def/defLoader.d.ts' />
 
 module Game.Core {
 
@@ -26,15 +26,46 @@ module Game.Core {
          **************************************************************************************************
          */
 
+        /**
+         * The stage (Scène) is the context where the renderer is displayed.
+         */
         private _stage;
+
+        /**
+         * The renderer is what is visible on the canvas.
+         */
         private _renderer;
-        private _layers: Game.Core.Layer[];
+
+        /**
+         * Manage layers.
+         */
+        private _layerManager: Game.Managers.LayerManager;
+
+        /**
+         * Manage sprites.
+         */
+        private _spriteManager: Game.Managers.SpriteManager;
+
+        /**
+         * Manage sprites.
+         */
+        private _textureManager: Game.Managers.TextureManager;
 
         /**
          **************************************************************************************************
          **************************************** Public methods ******************************************
          **************************************************************************************************
          */
+
+        /**
+         * Constructor.
+         * Initialize managers.
+         */
+        constructor(){
+            this._layerManager = new Game.Managers.LayerManager();
+            this._spriteManager = new Game.Managers.SpriteManager();
+            this._textureManager = new Game.Managers.TextureManager();
+        }
 
         /**
          **************************************************************************************************
@@ -48,10 +79,10 @@ module Game.Core {
          * @private
          */
         private _initGame(){
-            consoleDev('Initializing Pixi. ', 'debug');
+            consoleDev('Initializing the game... ', 'debug');
 
-            stage = new PIXI.Stage(0x222222);
-            renderer = PIXI.autoDetectRenderer(
+            this._stage = new PIXI.Stage(0x222222);
+            this._renderer = PIXI.autoDetectRenderer(
                 /*$(window).width() / 100 * 90,
                  $(window).height() / 100 * 90*/
                 $('#game').width(),
@@ -59,13 +90,14 @@ module Game.Core {
             );
 
             // Set the canvas id. We basically replace the skeleton.
-            renderer.view.id = "game";
+            this._renderer.view.id = "game";
 
             // Append the rendered view to the DOM.
-            $('#game').replaceWith(renderer.view);
+            $('#game').replaceWith(this._renderer.view);
 
-            var farTexture: PIXI.Texture = PIXI.Texture.fromImage("/images/parallax-scroller/bg-far.png");
-            farSprite = new PIXI.TilingSprite(
+            var farTexture = this._textureManager.createFromLocalImage('far', '/images/parallax-scroller/bg-far.png');
+            var farSprite = this._spriteManager.createTiling(farTexture.__name, farTexture, 512, 256);
+            var farSprite = new PIXI.TilingSprite(
                 farTexture,
                 512, 256
             );
@@ -73,7 +105,7 @@ module Game.Core {
             farSprite.position.y = 0;
             farSprite.tilePosition.x = 0;
             farSprite.tilePosition.y = 0;
-            stage.addChild(farSprite);// Adding the farSprite to the stage.
+            this._stage.addChild(farSprite);// Adding the farSprite to the stage.
 
             var midTexture: PIXI.Texture = PIXI.Texture.fromImage("/images/parallax-scroller/bg-mid.png");
             midSprite = new PIXI.TilingSprite(
@@ -84,7 +116,7 @@ module Game.Core {
             midSprite.position.y = 128;
             midSprite.tilePosition.x = 0;
             midSprite.tilePosition.y = 0;
-            stage.addChild(midSprite);// Adding the midSprite to the stage.
+            this._stage.addChild(midSprite);// Adding the midSprite to the stage.
 
             var self = this;
             requestAnimFrame(function() {self._update(); });
@@ -101,7 +133,7 @@ module Game.Core {
             midSprite.tilePosition.x -= 0.64;
 
             // Render the stage. Basically refresh the canvas content.
-            renderer.render(stage);
+            this._renderer.render(this._stage);
 
             var self = this;
             requestAnimFrame(function() {self._update(); });
@@ -117,8 +149,10 @@ module Game.Core {
          * Public static method, accessible from the client to start the game init process.
          */
         public static initialize(){
+            var gameEngine = new Game.Core.Engine();
+
             // Initialize the game.
-            var init = new Game.Core.Engine()._initGame();
+            gameEngine._initGame();
         }
     }
 }
