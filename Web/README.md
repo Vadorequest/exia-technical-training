@@ -1,5 +1,5 @@
 # Web application
-
+I've built the parallax based on the Pixi documentation at http://www.pixijs.com/resources/.
 
 ## How to run the application?
 In order to make this works, you will need the following to be installed on your computer:
