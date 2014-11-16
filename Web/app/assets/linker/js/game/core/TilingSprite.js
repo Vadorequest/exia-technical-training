@@ -14,6 +14,60 @@ var Game;
             function TilingSprite() {
                 _super.apply(this, arguments);
             }
+            /**
+             * Update the tile position.
+             *
+             * @param x     If set, will change the x position.
+             * @param y     If set, will change the y position.
+             * @returns {Game.Core.TilingSprite}
+             */
+            TilingSprite.prototype.updateTilePosition = function (x, y) {
+                if (x === void 0) { x = null; }
+                if (y === void 0) { y = null; }
+                if (x) {
+                    this.tilePosition.x = x;
+                }
+                if (y) {
+                    this.tilePosition.y = y;
+                }
+                return this;
+            };
+            /**
+             * Decrease the tile position based on the current value.
+             *
+             * @param x     If set, will decrease the x position.
+             * @param y     If set, will decrease the y position.
+             * @returns {Game.Core.TilingSprite}
+             */
+            TilingSprite.prototype.decreaseTilePosition = function (x, y) {
+                if (x === void 0) { x = null; }
+                if (y === void 0) { y = null; }
+                if (x) {
+                    this.tilePosition.x -= x;
+                }
+                if (y) {
+                    this.tilePosition.y -= y;
+                }
+                return this;
+            };
+            /**
+             * Increase the tile position based on the current value.
+             *
+             * @param x     If set, will increase the x position.
+             * @param y     If set, will increase the y position.
+             * @returns {Game.Core.TilingSprite}
+             */
+            TilingSprite.prototype.increaseTilePosition = function (x, y) {
+                if (x === void 0) { x = null; }
+                if (y === void 0) { y = null; }
+                if (x) {
+                    this.tilePosition.x += x;
+                }
+                if (y) {
+                    this.tilePosition.y += y;
+                }
+                return this;
+            };
             return TilingSprite;
         })(PIXI.TilingSprite);
         Core.TilingSprite = TilingSprite;

@@ -124,7 +124,7 @@ module Game.Core {
             var self = this;
             requestAnimFrame(function() {self._update(); });
 
-            consoleDev('Pixi has been initialized and the canvas has been refreshed. ', 'debug');
+            consoleDev('The game has been started. ', 'debug');
         }
 
         /**
@@ -132,8 +132,8 @@ module Game.Core {
          * @private
          */
         private _update(){
-            this._tilingSpriteManager.get('far').tilePosition.x -= 0.128;
-            this._tilingSpriteManager.get('mid').tilePosition.x -= 0.64;
+            this._tilingSpriteManager.get('far').decreaseTilePosition(0.128);
+            this._tilingSpriteManager.get('mid').increaseTilePosition(0.64);
 
             // Render the stage. Basically refresh the canvas content.
             this._renderer.render(this._stage);
