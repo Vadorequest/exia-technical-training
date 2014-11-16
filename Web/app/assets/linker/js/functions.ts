@@ -10,3 +10,11 @@ window['getPublicConfig'] = (function(){
     return __config.public ? __config.public : __config;
 });
 
+/**
+ * Check if a variable is set or not.
+ * @type {function(any): boolean}
+ * TODO Move this into "_"
+ */
+window['isSet'] = (function(variable){
+    return typeof variable !== 'undefined';
+});

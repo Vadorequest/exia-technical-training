@@ -15,9 +15,15 @@ var Game;
             __extends(TextureManager, _super);
             function TextureManager() {
                 _super.apply(this, arguments);
+                /**
+                 * Elements that are managed by the manager.
+                 * @override
+                 */
+                this._elements = [];
             }
-            TextureManager.prototype.createFromLocalImage = function (name, relativePath) {
-                return this.add(name, Game.Core.Texture.fromImage("/" + relativePath)).get(name);
+            TextureManager.prototype.createTextureFromLocalImage = function (name, relativePath, imgExt) {
+                if (imgExt === void 0) { imgExt = 'png'; }
+                return this.add(name, Game.Core.Texture.fromImage("/images/game/" + relativePath + '.' + imgExt)).get(name);
             };
             return TextureManager;
         })(Game.Managers.Manager);

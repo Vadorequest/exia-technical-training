@@ -22,7 +22,7 @@ define(["require", "exports", "Init"], function (require, exports, init) {
         function InitDefault(config, languages, defaultLanguage) {
             _super.call(this, config, languages, defaultLanguage);
             // Starts the game.
-            Game.Core.Engine.initialize(PIXI);
+            Game.Core.Engine.initialize();
         }
         return InitDefault;
     })(init.Init);

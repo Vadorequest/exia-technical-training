@@ -11,24 +11,16 @@ var Game;
 (function (Game) {
     var Managers;
     (function (Managers) {
-        /**
-         * Manage sprites.
-         */
         var SpriteManager = (function (_super) {
             __extends(SpriteManager, _super);
             function SpriteManager() {
                 _super.apply(this, arguments);
+                /**
+                 * Elements that are managed by the manager.
+                 * @override
+                 */
+                this._elements = [];
             }
-            /**
-             * Create a Tiling sprite.
-             *
-             * @param texture
-             * @param width
-             * @param height
-             */
-            SpriteManager.prototype.createTiling = function (name, texture, width, height) {
-                return this.add(name, Game.Core.TilingSprite).get(name);
-            };
             return SpriteManager;
         })(Game.Managers.Manager);
         Managers.SpriteManager = SpriteManager;

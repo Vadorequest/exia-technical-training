@@ -52,6 +52,11 @@ module Game.Core {
         private _textureManager: Game.Managers.TextureManager;
 
         /**
+         * Manage tiling sprites.
+         */
+        private _tilingSpriteManager: Game.Managers.TilingSpriteManager;
+
+        /**
          **************************************************************************************************
          **************************************** Public methods ******************************************
          **************************************************************************************************
@@ -65,6 +70,7 @@ module Game.Core {
             this._layerManager = new Game.Managers.LayerManager();
             this._spriteManager = new Game.Managers.SpriteManager();
             this._textureManager = new Game.Managers.TextureManager();
+            this._tilingSpriteManager = new Game.Managers.TilingSpriteManager();
         }
 
         /**
@@ -95,28 +101,25 @@ module Game.Core {
             // Append the rendered view to the DOM.
             $('#game').replaceWith(this._renderer.view);
 
-            var farTexture = this._textureManager.createFromLocalImage('far', '/images/parallax-scroller/bg-far.png');
-            var farSprite = this._spriteManager.createTiling(farTexture.__name, farTexture, 512, 256);
-            var farSprite = new PIXI.TilingSprite(
-                farTexture,
-                512, 256
-            );
+            var farTexture = this._textureManager.createTextureFromLocalImage('far', 'bg-far');
+            var farSprite = this._tilingSpriteManager.createTilingSprite('far', farTexture, 512, 256);
+
             farSprite.position.x = 0;
             farSprite.position.y = 0;
             farSprite.tilePosition.x = 0;
             farSprite.tilePosition.y = 0;
-            this._stage.addChild(farSprite);// Adding the farSprite to the stage.
 
-            var midTexture: PIXI.Texture = PIXI.Texture.fromImage("/images/parallax-scroller/bg-mid.png");
-            midSprite = new PIXI.TilingSprite(
-                midTexture,
-                512, 256
-            );
+            this._stage.addChild(farSprite);// Add the farSprite to the stage.
+
+            var midTexture = this._textureManager.createTextureFromLocalImage('mid', 'bg-mid');
+            var midSprite = this._tilingSpriteManager.createTilingSprite('mid', midTexture, 512, 256);
+
             midSprite.position.x = 0;
             midSprite.position.y = 128;
             midSprite.tilePosition.x = 0;
             midSprite.tilePosition.y = 0;
-            this._stage.addChild(midSprite);// Adding the midSprite to the stage.
+
+            this._stage.addChild(midSprite);// Add the midSprite to the stage.
 
             var self = this;
             requestAnimFrame(function() {self._update(); });
@@ -129,8 +132,8 @@ module Game.Core {
          * @private
          */
         private _update(){
-            farSprite.tilePosition.x -= 0.128;
-            midSprite.tilePosition.x -= 0.64;
+            this._tilingSpriteManager.get('far').tilePosition.x -= 0.128;
+            this._tilingSpriteManager.get('mid').tilePosition.x -= 0.64;
 
             // Render the stage. Basically refresh the canvas content.
             this._renderer.render(this._stage);

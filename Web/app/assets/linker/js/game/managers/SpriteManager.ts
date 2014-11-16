@@ -3,10 +3,14 @@
 ///<reference path='./Manager.ts'/>
 
 module Game.Managers {
-    /**
-     * Manage sprites.
-     */
     export class SpriteManager extends Game.Managers.Manager {
+
+        /**
+         * Elements that are managed by the manager.
+         * @override
+         */
+        protected _elements: Game.Core.Sprite[] = [];
+
         /**
          * Create a Tiling sprite.
          *
@@ -14,8 +18,8 @@ module Game.Managers {
          * @param width
          * @param height
          */
-        public createTiling(name: string, texture: Game.Core.Texture, width: number, height: number){
-            return this.add(name, Game.Core.TilingSprite).get(name);
-        }
+        //public createSprite(name: string, texture: Game.Core.Texture, width: number, height: number){
+        //    return this.add(name, Game.Core.TilingSprite).get(name);
+        //}
     }
 }
