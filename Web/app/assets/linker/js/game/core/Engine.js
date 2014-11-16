@@ -23,10 +23,20 @@ var Game;
                  **************************************** Constants ***********************************************
                  **************************************************************************************************
                  */
-                this.NAME_FAR_BACKGROUND = 'far';
-                this.SPEED_FAR_BACKGROUND = 0.128;
-                this.NAME_MID_BACKGROUND = 'mid';
-                this.SPEED_MID_BACKGROUND = 0.64;
+                this.FAR_TEXTURE_SETTINGS = {
+                    NAME: 'far',
+                    IMG: 'bg-far',
+                    WIDTH: 512,
+                    HEIGHT: 256,
+                    SPEED: 0.128
+                };
+                this.MID_TEXTURE_SETTINGS = {
+                    NAME: 'mid',
+                    IMG: 'bg-mid',
+                    WIDTH: 512,
+                    HEIGHT: 256,
+                    SPEED: 0.64
+                };
                 this._layerManager = new Game.Managers.LayerManager();
                 this._spriteManager = new Game.Managers.SpriteManager();
                 this._textureManager = new Game.Managers.TextureManager();
@@ -49,15 +59,15 @@ var Game;
                 this._renderer.view.id = "game";
                 // Append the rendered view to the DOM.
                 $('#game').replaceWith(this._renderer.view);
-                var farTexture = this._textureManager.createTextureFromLocalImage(this.NAME_FAR_BACKGROUND, 'bg-far');
-                var farSprite = this._tilingSpriteManager.createTilingSprite(this.NAME_FAR_BACKGROUND, farTexture, 512, 256);
+                var farTexture = this._textureManager.createTextureFromLocalImage(this.FAR_TEXTURE_SETTINGS.NAME, this.FAR_TEXTURE_SETTINGS.IMG);
+                var farSprite = this._tilingSpriteManager.createTilingSprite(this.FAR_TEXTURE_SETTINGS.NAME, farTexture, this.FAR_TEXTURE_SETTINGS.WIDTH, this.FAR_TEXTURE_SETTINGS.HEIGHT);
                 farSprite.position.x = 0;
                 farSprite.position.y = 0;
                 farSprite.tilePosition.x = 0;
                 farSprite.tilePosition.y = 0;
                 this._stage.addChild(farSprite); // Add the farSprite to the stage.
-                var midTexture = this._textureManager.createTextureFromLocalImage(this.NAME_MID_BACKGROUND, 'bg-mid');
-                var midSprite = this._tilingSpriteManager.createTilingSprite(this.NAME_MID_BACKGROUND, midTexture, 512, 256);
+                var midTexture = this._textureManager.createTextureFromLocalImage(this.MID_TEXTURE_SETTINGS.NAME, this.MID_TEXTURE_SETTINGS.IMG);
+                var midSprite = this._tilingSpriteManager.createTilingSprite(this.MID_TEXTURE_SETTINGS.NAME, midTexture, this.MID_TEXTURE_SETTINGS.WIDTH, this.MID_TEXTURE_SETTINGS.HEIGHT);
                 midSprite.position.x = 0;
                 midSprite.position.y = 128;
                 midSprite.tilePosition.x = 0;
@@ -74,8 +84,8 @@ var Game;
              * @private
              */
             Engine.prototype._update = function () {
-                this._tilingSpriteManager.get(this.NAME_FAR_BACKGROUND).decreaseTilePosition(this.SPEED_FAR_BACKGROUND);
-                this._tilingSpriteManager.get(this.NAME_MID_BACKGROUND).increaseTilePosition(this.SPEED_MID_BACKGROUND);
+                this._tilingSpriteManager.get(this.FAR_TEXTURE_SETTINGS.NAME).decreaseTilePosition(this.FAR_TEXTURE_SETTINGS.SPEED);
+                this._tilingSpriteManager.get(this.MID_TEXTURE_SETTINGS.NAME).increaseTilePosition(this.MID_TEXTURE_SETTINGS.SPEED);
                 // Render the stage. Basically refresh the canvas content.
                 this._renderer.render(this._stage);
                 var self = this;
