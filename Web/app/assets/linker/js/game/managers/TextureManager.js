@@ -1,5 +1,6 @@
 ///<reference path='./../defLoader.d.ts' />
 ///<reference path='./../core/def/defLoader.d.ts'/>
+///<reference path='./../helpers/def/defLoader.d.ts'/>
 ///<reference path='./Manager.ts'/>
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -15,7 +16,6 @@ var Game;
             __extends(TextureManager, _super);
             function TextureManager() {
                 _super.apply(this, arguments);
-                this.GAME_IMAGES_PATH = '/images/game/';
             }
             /**
              * Create a texture based on an image path relative to our application.
@@ -27,7 +27,7 @@ var Game;
              */
             TextureManager.prototype.createTextureFromLocalImage = function (name, relativePath, imgExt) {
                 if (imgExt === void 0) { imgExt = 'png'; }
-                return this.add(name, Game.Core.Texture.fromImage(this.GAME_IMAGES_PATH + relativePath + '.' + imgExt)).get(name);
+                return this.add(name, Game.Core.Texture.fromImage(Game.Helpers.Path.IMAGES_PATH + relativePath + '.' + imgExt)).get(name);
             };
             return TextureManager;
         })(Game.Managers.Manager);

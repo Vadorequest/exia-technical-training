@@ -1,11 +1,10 @@
 ///<reference path='./../defLoader.d.ts' />
 ///<reference path='./../core/def/defLoader.d.ts'/>
+///<reference path='./../helpers/def/defLoader.d.ts'/>
 ///<reference path='./Manager.ts'/>
 
 module Game.Managers {
     export class TextureManager extends Game.Managers.Manager {
-
-        private GAME_IMAGES_PATH: string = '/images/game/';
 
         /**
          * Elements that are managed by the manager.
@@ -22,7 +21,7 @@ module Game.Managers {
          * @returns {Game.Core.Texture}
          */
         public createTextureFromLocalImage(name: string, relativePath: string, imgExt: string = 'png'): Game.Core.Texture{
-            return this.add(name, Game.Core.Texture.fromImage(this.GAME_IMAGES_PATH + relativePath + '.' + imgExt)).get(name);
+            return this.add(name, Game.Core.Texture.fromImage(Game.Helpers.Path.IMAGES_PATH + relativePath + '.' + imgExt)).get(name);
         }
     }
 }
