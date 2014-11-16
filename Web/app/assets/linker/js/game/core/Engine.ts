@@ -13,6 +13,16 @@ module Game.Core {
          **************************************** Constants ***********************************************
          **************************************************************************************************
          */
+        /**
+         * Canvas ID in the DOM that will display the game.
+         * @type {string}
+         */
+        private CANVAS_ID: string = 'game';
+
+        /**
+         * Settings for the FAR texture, displayed as final background.
+         * @type {{NAME: string, IMG: string, WIDTH: number, HEIGHT: number, SPEED: number}}
+         */
         private FAR_TEXTURE_SETTINGS: Game.Core.ITextureSettings = {
             NAME: 'far',
             IMG: 'bg-far',
@@ -21,12 +31,17 @@ module Game.Core {
             SPEED: 0.128
         };
 
+        /**
+         * Settings for the MID texture, displayed on top of the FAR texture.
+         * @type {{NAME: string, IMG: string, WIDTH: number, HEIGHT: number, SPEED: number, SPRITE_POSITION_Y: number}}
+         */
         private MID_TEXTURE_SETTINGS: Game.Core.ITextureSettings = {
             NAME: 'mid',
             IMG: 'bg-mid',
             WIDTH: 512,
             HEIGHT: 256,
-            SPEED: 0.64
+            SPEED: 0.64,
+            SPRITE_POSITION_Y: 128
         };
 
         /**
@@ -59,11 +74,6 @@ module Game.Core {
         /**
          * Manage sprites.
          */
-        private _spriteManager: Game.Managers.SpriteManager;
-
-        /**
-         * Manage sprites.
-         */
         private _textureManager: Game.Managers.TextureManager;
 
         /**
@@ -83,7 +93,6 @@ module Game.Core {
          */
         constructor(){
             this._layerManager = new Game.Managers.LayerManager();
-            this._spriteManager = new Game.Managers.SpriteManager();
             this._textureManager = new Game.Managers.TextureManager();
             this._tilingSpriteManager = new Game.Managers.TilingSpriteManager();
         }
@@ -102,7 +111,7 @@ module Game.Core {
         private _initGame(){
             consoleDev('Initializing the game... ', 'debug');
 
-            this._stage = new PIXI.Stage(0x222222);
+            this._stage = new Game.Core.Stage(0x222222);
             this._renderer = PIXI.autoDetectRenderer(
                 /*$(window).width() / 100 * 90,
                  $(window).height() / 100 * 90*/
@@ -111,35 +120,57 @@ module Game.Core {
             );
 
             // Set the canvas id. We basically replace the skeleton.
-            this._renderer.view.id = "game";
+            this._renderer.view.id = this.CANVAS_ID;
 
             // Append the rendered view to the DOM.
             $('#game').replaceWith(this._renderer.view);
 
-            var farTexture = this._textureManager.createTextureFromLocalImage(this.FAR_TEXTURE_SETTINGS.NAME, this.FAR_TEXTURE_SETTINGS.IMG);
-            var farSprite = this._tilingSpriteManager.createTilingSprite(this.FAR_TEXTURE_SETTINGS.NAME, farTexture, this.FAR_TEXTURE_SETTINGS.WIDTH, this.FAR_TEXTURE_SETTINGS.HEIGHT);
+            // Initialize textures. Order count, last added will be on top of previous textures.
+            this._initializeTextures(this.FAR_TEXTURE_SETTINGS, this.MID_TEXTURE_SETTINGS);
 
-            farSprite.position.x = 0;
-            farSprite.position.y = 0;
-            farSprite.tilePosition.x = 0;
-            farSprite.tilePosition.y = 0;
-
-            this._stage.addChild(farSprite);// Add the farSprite to the stage.
-
-            var midTexture = this._textureManager.createTextureFromLocalImage(this.MID_TEXTURE_SETTINGS.NAME, this.MID_TEXTURE_SETTINGS.IMG);
-            var midSprite = this._tilingSpriteManager.createTilingSprite(this.MID_TEXTURE_SETTINGS.NAME, midTexture, this.MID_TEXTURE_SETTINGS.WIDTH, this.MID_TEXTURE_SETTINGS.HEIGHT);
-
-            midSprite.position.x = 0;
-            midSprite.position.y = 128;
-            midSprite.tilePosition.x = 0;
-            midSprite.tilePosition.y = 0;
-
-            this._stage.addChild(midSprite);// Add the midSprite to the stage.
-
-            var self = this;
-            requestAnimFrame(function() {self._update(); });
+            this._requestAnimFrame();
 
             consoleDev('The game has been started. ', 'debug');
+        }
+
+        /**
+         * Initialize all textures.
+         *
+         * @param texturesSettings
+         * @private
+         */
+        private _initializeTextures(...texturesSettings: Game.Core.ITextureSettings[]){
+            _.each(texturesSettings, function(textureSettings: Game.Core.ITextureSettings){
+                var farTexture = this._textureManager.createTextureFromLocalImage(
+                    textureSettings.NAME,
+                    textureSettings.IMG
+                );
+
+                var farSprite = this._tilingSpriteManager.createTilingSprite(
+                    textureSettings.NAME,
+                    farTexture,
+                    textureSettings.WIDTH,
+                    textureSettings.HEIGHT
+                );
+
+                // Set texture properties based on the settings.
+                farSprite.position.x = textureSettings.SPRITE_POSITION_X || 0;
+                farSprite.position.y = textureSettings.SPRITE_POSITION_Y || 0;
+                farSprite.tilePosition.x = textureSettings.SPRITE_TILE_POSITION_X || 0;
+                farSprite.tilePosition.y = textureSettings.SPRITE_TILE_POSITION_Y || 0;
+
+                // Add the farSprite to the stage.
+                this._stage.addChild(farSprite);
+            }, this);// Use internal reference as this. Otherwise we will be in another context and "this" will not be a "Engine" instance.
+        }
+
+        /**
+         * Refresh the rendered content.
+         * @private
+         */
+        private _requestAnimFrame(){
+            var self = this;
+            requestAnimFrame(function() {self._update(); });
         }
 
         /**
@@ -153,8 +184,8 @@ module Game.Core {
             // Render the stage. Basically refresh the canvas content.
             this._renderer.render(this._stage);
 
-            var self = this;
-            requestAnimFrame(function() {self._update(); });
+            // Infinite loop that will refresh the rendered content on each loop.
+            this._requestAnimFrame();
         }
 
         /**

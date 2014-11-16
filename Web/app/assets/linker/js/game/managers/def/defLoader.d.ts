@@ -5,6 +5,5 @@
  */
 
 ///<reference path='./../LayerManager.ts'/>
-///<reference path='./../SpriteManager.ts'/>
 ///<reference path='./../TextureManager.ts'/>
 ///<reference path='./../TilingSpriteManager.ts'/>

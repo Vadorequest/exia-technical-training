@@ -43,7 +43,7 @@ module Game.Managers {
          */
         public add(name: string, element): any{
             // Check if the key isn't already taken before to add the element.
-            if(!isSet(this._elements[name])){
+            if(!isDef(this._elements[name])){
                 // Add the element to the array of managed objects.
                 this._elements[name] = element;
 
@@ -63,7 +63,7 @@ module Game.Managers {
          */
         public update(name: string, element): any{
             // Check if the element exists before to update it.
-            if(isSet(this._elements[name])){
+            if(isDef(this._elements[name])){
                 // Update the element to the array of managed objects.
                 this._elements[name] = element;
 

@@ -15,6 +15,6 @@ window['getPublicConfig'] = (function(){
  * @type {function(any): boolean}
  * TODO Move this into "_"
  */
-window['isSet'] = (function(variable){
+window['isDef'] = (function(variable){
     return typeof variable !== 'undefined';
 });
