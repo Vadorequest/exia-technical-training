@@ -8,7 +8,7 @@ module Game.Managers {
          * Elements that are managed by the manager.
          * @override
          */
-        protected _elements: Game.Core.Layer[] = [];
+        protected _elements: Game.Core.Layer[];
 
     }
 }

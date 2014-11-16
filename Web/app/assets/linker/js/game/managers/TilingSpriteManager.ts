@@ -9,7 +9,7 @@ module Game.Managers {
          * Elements that are managed by the manager.
          * @override
          */
-        protected _elements: Game.Core.TilingSprite[] = [];
+        protected _elements: Game.Core.TilingSprite[];
 
         /**
          * Create a Tiling sprite.

@@ -11,7 +11,7 @@ module Game.Managers {
          * Elements that are managed by the manager.
          * @override
          */
-        protected _elements: Game.Core.Texture[] = [];
+        protected _elements: Game.Core.Texture[];
 
         /**
          * Create a texture based on an image path relative to our application.

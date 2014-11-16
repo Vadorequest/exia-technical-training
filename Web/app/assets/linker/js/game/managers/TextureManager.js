@@ -16,11 +16,6 @@ var Game;
             function TextureManager() {
                 _super.apply(this, arguments);
                 this.GAME_IMAGES_PATH = '/images/game/';
-                /**
-                 * Elements that are managed by the manager.
-                 * @override
-                 */
-                this._elements = [];
             }
             /**
              * Create a texture based on an image path relative to our application.

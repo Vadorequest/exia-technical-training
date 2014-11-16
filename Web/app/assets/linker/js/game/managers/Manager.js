@@ -9,6 +9,10 @@ var Game;
          */
         var Manager = (function () {
             function Manager() {
+                /**
+                 * Elements that are managed by the manager.
+                 */
+                this._elements = [];
             }
             /**
              * Return an element indexed by its name.

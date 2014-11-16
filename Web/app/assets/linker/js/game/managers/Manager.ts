@@ -20,7 +20,7 @@ module Game.Managers {
         /**
          * Elements that are managed by the manager.
          */
-        protected _elements: any[];
+        protected _elements: any[] = [];
 
         /**
          * Return an element indexed by its name.

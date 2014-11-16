@@ -15,11 +15,6 @@ var Game;
             __extends(SpriteManager, _super);
             function SpriteManager() {
                 _super.apply(this, arguments);
-                /**
-                 * Elements that are managed by the manager.
-                 * @override
-                 */
-                this._elements = [];
             }
             return SpriteManager;
         })(Game.Managers.Manager);
