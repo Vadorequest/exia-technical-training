@@ -13,6 +13,10 @@ module Game.Core {
          **************************************** Constants ***********************************************
          **************************************************************************************************
          */
+        private NAME_FAR_BACKGROUND: string = 'far';
+        private SPEED_FAR_BACKGROUND: number = 0.128;
+        private NAME_MID_BACKGROUND: string = 'mid';
+        private SPEED_MID_BACKGROUND: number = 0.64;
 
         /**
          **************************************************************************************************
@@ -101,8 +105,8 @@ module Game.Core {
             // Append the rendered view to the DOM.
             $('#game').replaceWith(this._renderer.view);
 
-            var farTexture = this._textureManager.createTextureFromLocalImage('far', 'bg-far');
-            var farSprite = this._tilingSpriteManager.createTilingSprite('far', farTexture, 512, 256);
+            var farTexture = this._textureManager.createTextureFromLocalImage(this.NAME_FAR_BACKGROUND, 'bg-far');
+            var farSprite = this._tilingSpriteManager.createTilingSprite(this.NAME_FAR_BACKGROUND, farTexture, 512, 256);
 
             farSprite.position.x = 0;
             farSprite.position.y = 0;
@@ -111,8 +115,8 @@ module Game.Core {
 
             this._stage.addChild(farSprite);// Add the farSprite to the stage.
 
-            var midTexture = this._textureManager.createTextureFromLocalImage('mid', 'bg-mid');
-            var midSprite = this._tilingSpriteManager.createTilingSprite('mid', midTexture, 512, 256);
+            var midTexture = this._textureManager.createTextureFromLocalImage(this.NAME_MID_BACKGROUND, 'bg-mid');
+            var midSprite = this._tilingSpriteManager.createTilingSprite(this.NAME_MID_BACKGROUND, midTexture, 512, 256);
 
             midSprite.position.x = 0;
             midSprite.position.y = 128;
@@ -132,8 +136,8 @@ module Game.Core {
          * @private
          */
         private _update(){
-            this._tilingSpriteManager.get('far').decreaseTilePosition(0.128);
-            this._tilingSpriteManager.get('mid').increaseTilePosition(0.64);
+            this._tilingSpriteManager.get(this.NAME_FAR_BACKGROUND).decreaseTilePosition(this.SPEED_FAR_BACKGROUND);
+            this._tilingSpriteManager.get(this.NAME_MID_BACKGROUND).increaseTilePosition(this.SPEED_MID_BACKGROUND);
 
             // Render the stage. Basically refresh the canvas content.
             this._renderer.render(this._stage);
