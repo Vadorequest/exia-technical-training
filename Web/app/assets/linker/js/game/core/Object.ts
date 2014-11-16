@@ -1,5 +1,8 @@
 ///<reference path='./../defLoader.d.ts' />
 
+/**
+ * Je ne suis pas sur de m'en servir, en attente de réponse sur SO.
+ */
 module Game.Core {
     export interface IObject {}
 

@@ -10,16 +10,5 @@ module Game.Managers {
          * @override
          */
         protected _elements: Game.Core.Sprite[] = [];
-
-        /**
-         * Create a Tiling sprite.
-         *
-         * @param texture
-         * @param width
-         * @param height
-         */
-        //public createSprite(name: string, texture: Game.Core.Texture, width: number, height: number){
-        //    return this.add(name, Game.Core.TilingSprite).get(name);
-        //}
     }
 }
