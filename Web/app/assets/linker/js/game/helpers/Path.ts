@@ -38,5 +38,32 @@ module Game.Helpers {
          */
         public static IMAGES_PATH: string = Path.RESOURCES_PATH + Path.IMAGES_FOLDER + Path.SEP;
 
+        /**
+         **************************************************************************************************
+         **************************************** Public static methods ***********************************
+         **************************************************************************************************
+         */
+
+        /**
+         * Resolve a sprite path and returns the path.
+         *
+         * @param sprite    Sprite name.
+         * @returns {string}
+         */
+        public static resolveSprite(sprite){
+            return Path.SPRITES_PATH + sprite + '.json';
+        }
+
+        /**
+         * Resolve an image path and returns the path.
+         *
+         * @param img   Image name.
+         * @param ext   Extension. [png]
+         * @returns {string}
+         */
+        public static resolveImage(img, ext = 'png'){
+            return Path.IMAGES_PATH + img + '.' + ext;
+        }
+
     }
 }

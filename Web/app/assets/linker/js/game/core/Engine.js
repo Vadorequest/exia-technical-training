@@ -51,6 +51,17 @@ var Game;
                     SPEED: 0.64,
                     SPRITE_POSITION_Y: 128
                 };
+                /**
+                 * Assets to load before to start the game.
+                 *
+                 * @type {string[]}
+                 * @private
+                 */
+                this._assetsToLoad = [
+                    Game.Helpers.Path.resolveSprite('wall'),
+                    Game.Helpers.Path.resolveImage('bg-mid'),
+                    Game.Helpers.Path.resolveImage('bg-far')
+                ];
                 this._layerManager = new Game.Managers.LayerManager();
                 this._textureManager = new Game.Managers.TextureManager();
                 this._tilingSpriteManager = new Game.Managers.TilingSpriteManager();
@@ -66,16 +77,19 @@ var Game;
              */
             Engine.prototype._initGame = function () {
                 consoleDev('Initializing the game... ', 'debug');
-                this._stage = new Game.Core.Stage(0x222222);
-                this._renderer = PIXI.autoDetectRenderer($('#game').width(), $('#game').height());
-                // Set the canvas id. We basically replace the skeleton.
-                this._renderer.view.id = this.CANVAS_ID;
-                // Append the rendered view to the DOM.
-                $('#game').replaceWith(this._renderer.view);
-                // Initialize textures. Order count, last added will be on top of previous textures.
-                this._initializeTextures(this.FAR_TEXTURE_SETTINGS, this.MID_TEXTURE_SETTINGS);
-                this._requestAnimFrame();
-                consoleDev('The game has been started. ', 'debug');
+                // Load all our assets. Once it's done then start the game.
+                Game.Core.AssetLoader.loadAssets(this._assetsToLoad, function (self) {
+                    self._stage = new Game.Core.Stage(0x222222);
+                    self._renderer = PIXI.autoDetectRenderer($('#game').width(), $('#game').height());
+                    // Set the canvas id. We basically replace the skeleton.
+                    self._renderer.view.id = self.CANVAS_ID;
+                    // Append the rendered view to the DOM.
+                    $('#game').replaceWith(self._renderer.view);
+                    // Initialize textures. Order count, last added will be on top of previous textures.
+                    self._initializeTextures(self.FAR_TEXTURE_SETTINGS, self.MID_TEXTURE_SETTINGS);
+                    self._requestAnimFrame();
+                    consoleDev('The game has been started. ', 'debug');
+                }, this);
             };
             /**
              * Initialize all textures.

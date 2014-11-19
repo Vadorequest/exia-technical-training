@@ -3,6 +3,7 @@
 /**
  * References its own classes, but not the engine.
  */
+///<reference path='./../AssetLoader.ts'/>
 ///<reference path='./../Layer.ts'/>
 ///<reference path='./../Stage.ts'/>
 ///<reference path='./../Texture.ts'/>
