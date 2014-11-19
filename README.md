@@ -17,3 +17,8 @@ If you want to work on your own project, be careful to work on your specific bra
 - windows-phone-master
 
 If you want to use several branches, please create branches using your own project `id`, as the following: `android-engine`, `web-fix-scrolling` and so on to make sure they're yours.
+
+
+## Web application
+
+Please read the documentation at `Web/README.md`.
