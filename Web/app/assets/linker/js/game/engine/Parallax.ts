@@ -1,12 +1,12 @@
 ///<reference path='./../defLoader.d.ts' />
 ///<reference path='./../managers/def/defLoader.d.ts' />
 
-module Game.Core {
+module Game.Engine {
 
     /**
      * Public class used to setup the game.
      */
-    export class Engine {
+    export class Parallax {
 
         /**
          **************************************************************************************************
@@ -127,7 +127,7 @@ module Game.Core {
             consoleDev('Initializing the game... ', 'debug');
 
             // Load all our assets. Once it's done then start the game.
-            Game.Core.AssetLoader.loadAssets(this._assetsToLoad, function(self: Game.Core.Engine){
+            Game.Core.AssetLoader.loadAssets(this._assetsToLoad, function(self: Game.Engine.Parallax){
                 self._stage = new Game.Core.Stage(0x222222);
                 self._renderer = PIXI.autoDetectRenderer(
                     /*$(window).width() / 100 * 90,
@@ -179,7 +179,7 @@ module Game.Core {
 
                 // Add the farSprite to the stage.
                 this._stage.addChild(farSprite);
-            }, this);// Use internal reference as this. Otherwise we will be in another context and "this" will not be a "Engine" instance.
+            }, this);// Use internal reference as this. Otherwise we will be in another context and "this" will not be a "Game" instance.
         }
 
         /**
@@ -216,7 +216,7 @@ module Game.Core {
          * Public static method, accessible from the client to start the game init process.
          */
         public static initialize(){
-            var gameEngine = new Game.Core.Engine();
+            var gameEngine = new Game.Engine.Parallax();
 
             // Initialize the game.
             gameEngine._initGame();

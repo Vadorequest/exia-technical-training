@@ -21,6 +21,6 @@ export class InitDefault extends init.Init{
         super(config, languages, defaultLanguage);
 
         // Starts the game.
-        Game.Core.Engine.initialize();
+        Game.Engine.Parallax.initialize();
     }
 }

@@ -2,12 +2,12 @@
 ///<reference path='./../managers/def/defLoader.d.ts' />
 var Game;
 (function (Game) {
-    var Core;
-    (function (Core) {
+    var Engine;
+    (function (Engine) {
         /**
          * Public class used to setup the game.
          */
-        var Engine = (function () {
+        var Parallax = (function () {
             /**
              **************************************************************************************************
              **************************************** Public methods ******************************************
@@ -17,7 +17,7 @@ var Game;
              * Constructor.
              * Initialize managers.
              */
-            function Engine() {
+            function Parallax() {
                 /**
                  **************************************************************************************************
                  **************************************** Constants ***********************************************
@@ -75,7 +75,7 @@ var Game;
              * Initialize Game canvas.
              * @private
              */
-            Engine.prototype._initGame = function () {
+            Parallax.prototype._initGame = function () {
                 consoleDev('Initializing the game... ', 'debug');
                 // Load all our assets. Once it's done then start the game.
                 Game.Core.AssetLoader.loadAssets(this._assetsToLoad, function (self) {
@@ -97,7 +97,7 @@ var Game;
              * @param texturesSettings
              * @private
              */
-            Engine.prototype._initializeTextures = function () {
+            Parallax.prototype._initializeTextures = function () {
                 var texturesSettings = [];
                 for (var _i = 0; _i < arguments.length; _i++) {
                     texturesSettings[_i - 0] = arguments[_i];
@@ -112,13 +112,13 @@ var Game;
                     farSprite.tilePosition.y = textureSettings.SPRITE_TILE_POSITION_Y || 0;
                     // Add the farSprite to the stage.
                     this._stage.addChild(farSprite);
-                }, this); // Use internal reference as this. Otherwise we will be in another context and "this" will not be a "Engine" instance.
+                }, this); // Use internal reference as this. Otherwise we will be in another context and "this" will not be a "Game" instance.
             };
             /**
              * Refresh the rendered content.
              * @private
              */
-            Engine.prototype._requestAnimFrame = function () {
+            Parallax.prototype._requestAnimFrame = function () {
                 var self = this;
                 requestAnimFrame(function () {
                     self._update();
@@ -128,7 +128,7 @@ var Game;
              * Update the canvas and calls itself indefinitely.
              * @private
              */
-            Engine.prototype._update = function () {
+            Parallax.prototype._update = function () {
                 this._tilingSpriteManager.get(this.FAR_TEXTURE_SETTINGS.NAME).decreaseTilePosition(this.FAR_TEXTURE_SETTINGS.SPEED);
                 this._tilingSpriteManager.get(this.MID_TEXTURE_SETTINGS.NAME).increaseTilePosition(this.MID_TEXTURE_SETTINGS.SPEED);
                 // Render the stage. Basically refresh the canvas content.
@@ -144,14 +144,14 @@ var Game;
             /**
              * Public static method, accessible from the client to start the game init process.
              */
-            Engine.initialize = function () {
-                var gameEngine = new Game.Core.Engine();
+            Parallax.initialize = function () {
+                var gameEngine = new Game.Engine.Parallax();
                 // Initialize the game.
                 gameEngine._initGame();
             };
-            return Engine;
+            return Parallax;
         })();
-        Core.Engine = Engine;
-    })(Core = Game.Core || (Game.Core = {}));
+        Engine.Parallax = Parallax;
+    })(Engine = Game.Engine || (Game.Engine = {}));
 })(Game || (Game = {}));
-//# sourceMappingURL=Engine.js.map
+//# sourceMappingURL=Parallax.js.map
