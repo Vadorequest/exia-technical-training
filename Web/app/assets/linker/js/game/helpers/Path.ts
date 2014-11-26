@@ -15,16 +15,22 @@ module Game.Helpers {
         public static RESOURCES_PATH: string = '/linker/js/game/resources/';
 
         /**
-         * Name of the sprite folder.
+         * Name of the sprites folder.
          * @type {string}
          */
         public static SPRITES_FOLDER: string = 'sprites';
 
         /**
-         * Name of the sprite folder.
+         * Name of the images folder.
          * @type {string}
          */
         public static IMAGES_FOLDER: string = 'images';
+
+        /**
+         * Name of the animations folder.
+         * @type {string}
+         */
+        public static ANIMATIONS_FOLDER: string = 'anim';
 
         /**
          * Sprites relative path from root.
@@ -37,6 +43,12 @@ module Game.Helpers {
          * @type {string}
          */
         public static IMAGES_PATH: string = Path.RESOURCES_PATH + Path.IMAGES_FOLDER + Path.SEP;
+
+        /**
+         * Animations relative path from root.
+         * @type {string}
+         */
+        public static ANIMATIONS_PATH: string = Path.RESOURCES_PATH + Path.ANIMATIONS_FOLDER + Path.SEP;
 
         /**
          **************************************************************************************************
@@ -64,6 +76,17 @@ module Game.Helpers {
          */
         public static resolveImage(img: string, ext: string = 'png'){
             return Path.IMAGES_PATH + img + '.' + ext;
+        }
+
+        /**
+         * Resolve an animation path and returns the path.
+         *
+         * @param anim  Animation name.
+         * @param ext   Extension. [anim]
+         * @returns {string}
+         */
+        public static resolveAnim(anim: string, ext: string = 'anim'){
+            return Path.ANIMATIONS_PATH + anim + '.' + ext;
         }
 
     }

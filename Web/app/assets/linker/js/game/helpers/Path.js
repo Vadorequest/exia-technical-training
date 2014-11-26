@@ -34,6 +34,17 @@ var Game;
                 return Path.IMAGES_PATH + img + '.' + ext;
             };
             /**
+             * Resolve an animation path and returns the path.
+             *
+             * @param anim  Animation name.
+             * @param ext   Extension. [anim]
+             * @returns {string}
+             */
+            Path.resolveAnim = function (anim, ext) {
+                if (ext === void 0) { ext = 'anim'; }
+                return Path.ANIMATIONS_PATH + anim + '.' + ext;
+            };
+            /**
              * Separator used to separate paths.
              * @type {string}
              */
@@ -44,15 +55,20 @@ var Game;
              */
             Path.RESOURCES_PATH = '/linker/js/game/resources/';
             /**
-             * Name of the sprite folder.
+             * Name of the sprites folder.
              * @type {string}
              */
             Path.SPRITES_FOLDER = 'sprites';
             /**
-             * Name of the sprite folder.
+             * Name of the images folder.
              * @type {string}
              */
             Path.IMAGES_FOLDER = 'images';
+            /**
+             * Name of the animations folder.
+             * @type {string}
+             */
+            Path.ANIMATIONS_FOLDER = 'anim';
             /**
              * Sprites relative path from root.
              * @type {string}
@@ -63,6 +79,11 @@ var Game;
              * @type {string}
              */
             Path.IMAGES_PATH = Path.RESOURCES_PATH + Path.IMAGES_FOLDER + Path.SEP;
+            /**
+             * Animations relative path from root.
+             * @type {string}
+             */
+            Path.ANIMATIONS_PATH = Path.RESOURCES_PATH + Path.ANIMATIONS_FOLDER + Path.SEP;
             return Path;
         })();
         Helpers.Path = Path;
