@@ -44,6 +44,20 @@ module Game.Engine {
             SPRITE_POSITION_Y: 128
         };
 
+
+        //private CHARACTER_TEXTURE_SETTINGS: Game.Core.ITextureSettings = {
+        //    NAME: 'character',
+        //    IMG: 'character',
+        //    WIDTH: 150,
+        //    HEIGHT: 361,
+        //    SPEED: 0.32,
+        //    SPRITE_POSITION_Y: 100,
+        //    // Callback once it's loaded
+        //    ONCE_LOADED: function(){
+        //
+        //    }
+        //};
+
         /**
          **************************************************************************************************
          **************************************** Public properties ***************************************
@@ -69,20 +83,22 @@ module Game.Engine {
         /**
          * Manage layers.
          */
-        private _layerManager: Game.Managers.LayerManager;
+        private _layerManager: Game.Managers.LayerManager = new Game.Managers.LayerManager();
 
         /**
          * Manage sprites.
          */
-        private _textureManager: Game.Managers.TextureManager;
+        private _textureManager: Game.Managers.TextureManager = new Game.Managers.TextureManager();
 
         /**
          * Manage tiling sprites.
          */
-        private _tilingSpriteManager: Game.Managers.TilingSpriteManager;
+        private _tilingSpriteManager: Game.Managers.TilingSpriteManager = new Game.Managers.TilingSpriteManager();
 
         /**
          * Assets to load before to start the game.
+         * They will be put in the Pixi cache and used from it afterwards.
+         * The game won't start before all assets are loaded.
          *
          * @type {string[]}
          * @private
@@ -90,10 +106,16 @@ module Game.Engine {
         private _assetsToLoad: string[] = [
             // Sprites
             Game.Helpers.Path.resolveSprite('wall'),
+            Game.Helpers.Path.resolveSprite('dragonBones'),
 
             // Images
+            Game.Helpers.Path.resolveImage('dragonBones'),
+            Game.Helpers.Path.resolveImage('character'),
             Game.Helpers.Path.resolveImage('bg-mid'),
-            Game.Helpers.Path.resolveImage('bg-far')
+            Game.Helpers.Path.resolveImage('bg-far'),
+
+            // Animations
+            Game.Helpers.Path.resolveAnim('dragonBones')
         ];
 
         /**
@@ -101,16 +123,6 @@ module Game.Engine {
          **************************************** Public methods ******************************************
          **************************************************************************************************
          */
-
-        /**
-         * Constructor.
-         * Initialize managers.
-         */
-        constructor(){
-            this._layerManager = new Game.Managers.LayerManager();
-            this._textureManager = new Game.Managers.TextureManager();
-            this._tilingSpriteManager = new Game.Managers.TilingSpriteManager();
-        }
 
         /**
          **************************************************************************************************
@@ -143,7 +155,13 @@ module Game.Engine {
                 $('#game').replaceWith(self._renderer.view);
 
                 // Initialize textures. Order count, last added will be on top of previous textures.
-                self._initializeTextures(self.FAR_TEXTURE_SETTINGS, self.MID_TEXTURE_SETTINGS);
+                self._initializeTextures(
+                    self.FAR_TEXTURE_SETTINGS,
+                    self.MID_TEXTURE_SETTINGS/*,
+                    self.CHARACTER_TEXTURE_SETTINGS*/
+                );
+
+                self._initializeSpines();
 
                 self._requestAnimFrame();
 
@@ -159,27 +177,44 @@ module Game.Engine {
          */
         private _initializeTextures(...texturesSettings: Game.Core.ITextureSettings[]){
             _.each(texturesSettings, function(textureSettings: Game.Core.ITextureSettings){
-                var farTexture = this._textureManager.createTextureFromLocalImage(
+                var texture = this._textureManager.createTextureFromLocalImage(
                     textureSettings.NAME,
                     textureSettings.IMG
                 );
 
-                var farSprite = this._tilingSpriteManager.createTilingSprite(
+                var sprite = this._tilingSpriteManager.createTilingSprite(
                     textureSettings.NAME,
-                    farTexture,
+                    texture,
                     textureSettings.WIDTH,
                     textureSettings.HEIGHT
                 );
 
                 // Set texture properties based on the settings.
-                farSprite.position.x = textureSettings.SPRITE_POSITION_X || 0;
-                farSprite.position.y = textureSettings.SPRITE_POSITION_Y || 0;
-                farSprite.tilePosition.x = textureSettings.SPRITE_TILE_POSITION_X || 0;
-                farSprite.tilePosition.y = textureSettings.SPRITE_TILE_POSITION_Y || 0;
+                //sprite.anchor.x = textureSettings.SPRITE_ANCHOR_X || 0.5;
+                //sprite.anchor.y = textureSettings.SPRITE_ANCHOR_Y || 0.5;
+                sprite.position.x = textureSettings.SPRITE_POSITION_X || 0;
+                sprite.position.y = textureSettings.SPRITE_POSITION_Y || 0;
+                sprite.tilePosition.x = textureSettings.SPRITE_TILE_POSITION_X || 0;
+                sprite.tilePosition.y = textureSettings.SPRITE_TILE_POSITION_Y || 0;
 
-                // Add the farSprite to the stage.
-                this._stage.addChild(farSprite);
+                // Add the sprite to the stage.
+                this._stage.addChild(sprite);
             }, this);// Use internal reference as this. Otherwise we will be in another context and "this" will not be a "Game" instance.
+        }
+
+        private _initializeSpines(){
+            //var dragon = new PIXI.Spine(Game.Helpers.Path.resolveAnim('dragonBones'));
+            //
+            //// position the dragon..
+            ////dragon.position.x = window.innerWidth/2;
+            ////dragon.position.y = window.innerHeight/2 + (450);
+            //
+            //// set the state of the dragon to its "flying" animation
+            //// and setting loop to true
+            //dragon.state.setAnimationByName("flying", true);
+            //
+            //// Add scary dragon to stage.. recoil with fear..
+            //this._stage.addChild(dragon);
         }
 
         /**
