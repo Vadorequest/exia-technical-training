@@ -536,6 +536,7 @@ declare module PIXI {
         url: string;
         crossorigin: boolean;
         loaded: boolean;
+        state: any;
 
         constructor(url: string);
         load();
