@@ -89,19 +89,24 @@ var Game;
             Parallax.prototype._initGame = function () {
                 consoleDev('Initializing the game... ', 'debug');
                 // Load all our assets. Once it's done then start the game.
-                Game.Core.AssetLoader.loadAssets(this._assetsToLoad, function (self) {
-                    self._stage = new Game.Core.Stage(0x222222);
-                    self._renderer = PIXI.autoDetectRenderer($('#game').width(), $('#game').height());
-                    // Set the canvas id. We basically replace the skeleton.
-                    self._renderer.view.id = self.CANVAS_ID;
-                    // Append the rendered view to the DOM.
-                    $('#game').replaceWith(self._renderer.view);
-                    // Initialize textures. Order count, last added will be on top of previous textures.
-                    self._initializeTextures(self.FAR_TEXTURE_SETTINGS, self.MID_TEXTURE_SETTINGS);
-                    self._initializeSpines();
-                    self._requestAnimFrame();
-                    consoleDev('The game has been started. ', 'debug');
-                }, this);
+                Game.Core.AssetLoader.loadAssets(this._assetsToLoad, this._onceAssetsLoaded.bind(this));
+            };
+            /**
+             * Executed once assets are loaded by the asset loader.
+             * @private
+             */
+            Parallax.prototype._onceAssetsLoaded = function () {
+                this._stage = new Game.Core.Stage(0x222222);
+                this._renderer = PIXI.autoDetectRenderer($('#game').width(), $('#game').height());
+                // Set the canvas id. We basically replace the skeleton.
+                this._renderer.view.id = this.CANVAS_ID;
+                // Append the rendered view to the DOM.
+                $('#game').replaceWith(this._renderer.view);
+                // Initialize textures. Order count, last added will be on top of previous textures.
+                this._initializeTextures(this.FAR_TEXTURE_SETTINGS, this.MID_TEXTURE_SETTINGS);
+                this._initializeSpines();
+                this._requestAnimFrame();
+                consoleDev('The game has been started. ', 'debug');
             };
             /**
              * Initialize all textures.
@@ -129,18 +134,15 @@ var Game;
                 }, this); // Use internal reference as this. Otherwise we will be in another context and "this" will not be a "Game" instance.
             };
             Parallax.prototype._initializeSpines = function () {
-                //var dragon = new PIXI.Spine(Game.Helpers.Path.resolveAnim('dragonBones'));
-                //
-                //// position the dragon..
-                ////dragon.position.x = window.innerWidth/2;
-                ////dragon.position.y = window.innerHeight/2 + (450);
-                //
-                //// set the state of the dragon to its "flying" animation
-                //// and setting loop to true
-                //dragon.state.setAnimationByName("flying", true);
-                //
-                //// Add scary dragon to stage.. recoil with fear..
-                //this._stage.addChild(dragon);
+                var dragon = new PIXI.Spine(Game.Helpers.Path.resolveAnim('dragonBones'));
+                // position the dragon..
+                //dragon.position.x = window.innerWidth/2;
+                //dragon.position.y = window.innerHeight/2 + (450);
+                // set the state of the dragon to its "flying" animation
+                // and setting loop to true
+                dragon.state.setAnimationByName("flying", true);
+                // Add scary dragon to stage.. recoil with fear..
+                this._stage.addChild(dragon);
             };
             /**
              * Refresh the rendered content.

@@ -139,34 +139,40 @@ module Game.Engine {
             consoleDev('Initializing the game... ', 'debug');
 
             // Load all our assets. Once it's done then start the game.
-            Game.Core.AssetLoader.loadAssets(this._assetsToLoad, function(self: Game.Engine.Parallax){
-                self._stage = new Game.Core.Stage(0x222222);
-                self._renderer = PIXI.autoDetectRenderer(
-                    /*$(window).width() / 100 * 90,
-                     $(window).height() / 100 * 90*/
-                    $('#game').width(),
-                    $('#game').height()
-                );
+            Game.Core.AssetLoader.loadAssets(this._assetsToLoad, this._onceAssetsLoaded.bind(this));
+        }
 
-                // Set the canvas id. We basically replace the skeleton.
-                self._renderer.view.id = self.CANVAS_ID;
+        /**
+         * Executed once assets are loaded by the asset loader.
+         * @private
+         */
+        private _onceAssetsLoaded(){
+            this._stage = new Game.Core.Stage(0x222222);
+            this._renderer = PIXI.autoDetectRenderer(
+                /*$(window).width() / 100 * 90,
+                 $(window).height() / 100 * 90*/
+                $('#game').width(),
+                $('#game').height()
+            );
 
-                // Append the rendered view to the DOM.
-                $('#game').replaceWith(self._renderer.view);
+            // Set the canvas id. We basically replace the skeleton.
+            this._renderer.view.id = this.CANVAS_ID;
 
-                // Initialize textures. Order count, last added will be on top of previous textures.
-                self._initializeTextures(
-                    self.FAR_TEXTURE_SETTINGS,
-                    self.MID_TEXTURE_SETTINGS/*,
-                    self.CHARACTER_TEXTURE_SETTINGS*/
-                );
+            // Append the rendered view to the DOM.
+            $('#game').replaceWith(this._renderer.view);
 
-                self._initializeSpines();
+            // Initialize textures. Order count, last added will be on top of previous textures.
+            this._initializeTextures(
+                this.FAR_TEXTURE_SETTINGS,
+                this.MID_TEXTURE_SETTINGS/*,
+                 self.CHARACTER_TEXTURE_SETTINGS*/
+            );
 
-                self._requestAnimFrame();
+            this._initializeSpines();
 
-                consoleDev('The game has been started. ', 'debug');
-            }, this);
+            this._requestAnimFrame();
+
+            consoleDev('The game has been started. ', 'debug');
         }
 
         /**
@@ -203,18 +209,18 @@ module Game.Engine {
         }
 
         private _initializeSpines(){
-            //var dragon = new PIXI.Spine(Game.Helpers.Path.resolveAnim('dragonBones'));
-            //
-            //// position the dragon..
-            ////dragon.position.x = window.innerWidth/2;
-            ////dragon.position.y = window.innerHeight/2 + (450);
-            //
-            //// set the state of the dragon to its "flying" animation
-            //// and setting loop to true
-            //dragon.state.setAnimationByName("flying", true);
-            //
-            //// Add scary dragon to stage.. recoil with fear..
-            //this._stage.addChild(dragon);
+            var dragon = new PIXI.Spine(Game.Helpers.Path.resolveAnim('dragonBones'));
+
+            // position the dragon..
+            //dragon.position.x = window.innerWidth/2;
+            //dragon.position.y = window.innerHeight/2 + (450);
+
+            // set the state of the dragon to its "flying" animation
+            // and setting loop to true
+            dragon.state.setAnimationByName("flying", true);
+
+            // Add scary dragon to stage.. recoil with fear..
+            this._stage.addChild(dragon);
         }
 
         /**

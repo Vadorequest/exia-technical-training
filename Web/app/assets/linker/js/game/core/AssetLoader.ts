@@ -10,9 +10,9 @@ module Game.Core {
          * @param onComplete
          * @returns {Game.Core.AssetLoader}
          */
-        public static loadAssets(assets: string[], onComplete: (context: any)=> any, context: any): AssetLoader{
+        public static loadAssets(assets: string[], onComplete: ()=> any): AssetLoader{
             var loader = new AssetLoader(assets);
-            loader.onComplete = onComplete(context);
+            loader.onComplete = onComplete;
             loader.load();
 
             return loader;

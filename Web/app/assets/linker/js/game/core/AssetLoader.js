@@ -21,9 +21,9 @@ var Game;
              * @param onComplete
              * @returns {Game.Core.AssetLoader}
              */
-            AssetLoader.loadAssets = function (assets, onComplete, context) {
+            AssetLoader.loadAssets = function (assets, onComplete) {
                 var loader = new AssetLoader(assets);
-                loader.onComplete = onComplete(context);
+                loader.onComplete = onComplete;
                 loader.load();
                 return loader;
             };
