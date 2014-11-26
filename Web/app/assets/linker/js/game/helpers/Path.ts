@@ -48,10 +48,11 @@ module Game.Helpers {
          * Resolve a sprite path and returns the path.
          *
          * @param sprite    Sprite name.
+         * @param ext   Extension. [json]
          * @returns {string}
          */
-        public static resolveSprite(sprite){
-            return Path.SPRITES_PATH + sprite + '.json';
+        public static resolveSprite(sprite: string, ext: string = 'json'){
+            return Path.SPRITES_PATH + sprite + '.' + ext;
         }
 
         /**
@@ -61,7 +62,7 @@ module Game.Helpers {
          * @param ext   Extension. [png]
          * @returns {string}
          */
-        public static resolveImage(img, ext = 'png'){
+        public static resolveImage(img: string, ext: string = 'png'){
             return Path.IMAGES_PATH + img + '.' + ext;
         }
 

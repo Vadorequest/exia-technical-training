@@ -15,10 +15,12 @@ var Game;
              * Resolve a sprite path and returns the path.
              *
              * @param sprite    Sprite name.
+             * @param ext   Extension. [json]
              * @returns {string}
              */
-            Path.resolveSprite = function (sprite) {
-                return Path.SPRITES_PATH + sprite + '.json';
+            Path.resolveSprite = function (sprite, ext) {
+                if (ext === void 0) { ext = 'json'; }
+                return Path.SPRITES_PATH + sprite + '.' + ext;
             };
             /**
              * Resolve an image path and returns the path.
