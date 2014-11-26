@@ -21,11 +21,12 @@ module.exports = function(grunt) {
     grunt.config.set('copy', {
         dev: {
             files: [
-                // Copy all assets excepted some extension that are used server side only (less, ts, coffee, ...).
+                // Copy all assets excepted some extension that are used server side only (less, coffee, ...).
+                // TS files are used to debug and removed using a "clean" strategy in production mode.
                 {
                     expand: true,
                     cwd: './assets',
-                    src: ['**/*.!(coffee|ts|d.ts|less|md|ejs)'],
+                    src: ['**/*.!(coffee|less|md|ejs)'],
                     dest: '.tmp/public'
                 },
                 // Copy all shared/public files into the public/shared directory accessible from client side.
@@ -40,31 +41,15 @@ module.exports = function(grunt) {
                     expand: true,
                     cwd: './shared/app/public',
                     src: ['**/*.js.map'],
-                    dest: '.tmp/public/js/shared',
-                    ext: '.js.map'
+                    dest: '.tmp/public/js/shared'
                 },// Copy all TS files from the shared/public directory in the client side, they are used to debug in the browser.
                 {
                     expand: true,
                     cwd: './shared/app/public',
                     src: ['**/*.ts'],
-                    dest: '.tmp/public/js/shared',
-                    ext: '.ts'
-                },// Copy all globals files into the public/globals directory accessible from client side.
-                {
-                    expand: true,
-                    cwd: './assets/js/' + __config.environment,
-                    src: ['**/*.js'],
-                    dest: '.tmp/public/linker/js/'+ __config.environment,
-                    ext: '.min.js'
-                },// Copy all mapping files from the shared/public directory in the client side, they are used to debug in the browser.
-                {
-                    expand: true,
-                    cwd: './assets/js/' + __config.environment,
-                    src: ['**/*.js.map'],
-                    dest: '.tmp/public/linker/js/'+ __config.environment,
-                    ext: '.js.map'
+                    dest: '.tmp/public/js/shared'
                 },
-                // Copy the private locales  files into the public/language directory accessible from client side.
+                // Copy the private locales files into the public/language directory accessible from client side.
                 {
                     expand: true,
                     cwd: './config/locales',
@@ -72,6 +57,20 @@ module.exports = function(grunt) {
                     dest: '.tmp/public/languages'
                 }
             ]
+            //,
+            //options: {
+            //    process: function(content, srcpath){
+            //        console.log(path.extname(srcpath))
+            //        if(path.extname(srcpath) === '.js'){
+            //            if(__config.environment === 'production'){
+            //                // Remove the end of script that loads the .js.map so we can avoid to provide them also.
+            //                return content.replace('//# sourceMappingURL=', '// ');
+            //            }
+            //        }
+            //
+            //        return content;
+            //    }
+            //}
         },
         build: {
             files: [{

@@ -1,15 +1,20 @@
 module.exports = function (grunt) {
-	grunt.registerTask('prod', [
-		'compileAssets',
-		'concat',
-		'uglify',
-		'cssmin',
-		'sails-linker:prodJsBefore',
-		'sails-linker:prodJs',
-		'sails-linker:prodStyles',
-		'sails-linker:devTpl',
-		'sails-linker:prodJsJade',
-		'sails-linker:prodStylesJade',
-		'sails-linker:devTplJade'
-	]);
+    /**
+     * Executed in production mode.
+     */
+    grunt.registerTask('prod', [
+        // Registered task.
+        'compileAssetsProd',
+
+        // Concat files then uglify JS files and finally do the same for CSS files.
+        'concat',
+        'uglify',
+        'cssmin',
+
+        // Registered task.
+        'linkAssetsProd',
+
+        // Cleanup the folder so that only what's useful is kept.
+        'clean:prodAfter'
+    ]);
 };
