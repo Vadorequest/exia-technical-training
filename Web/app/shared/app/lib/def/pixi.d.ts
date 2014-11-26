@@ -532,7 +532,7 @@ declare module PIXI {
         sepia: number;
     }
 
-    export class Spine {
+    export class Spine extends DisplayObject{
         url: string;
         crossorigin: boolean;
         loaded: boolean;

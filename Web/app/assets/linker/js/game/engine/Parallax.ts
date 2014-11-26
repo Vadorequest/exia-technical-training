@@ -212,8 +212,10 @@ module Game.Engine {
             var dragon = new PIXI.Spine(Game.Helpers.Path.resolveAnim('dragonBones'));
 
             // position the dragon..
-            //dragon.position.x = window.innerWidth/2;
-            //dragon.position.y = window.innerHeight/2 + (450);
+            dragon.position.x = 50;
+            dragon.position.y = 200;
+            dragon.scale.x = 0.2;
+            dragon.scale.y = 0.2;
 
             // set the state of the dragon to its "flying" animation
             // and setting loop to true
