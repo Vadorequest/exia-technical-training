@@ -136,7 +136,7 @@ var Game;
             Parallax.prototype._initializeSpines = function () {
                 var dragon = new PIXI.Spine(Game.Helpers.Path.resolveAnim('dragonBones'));
                 // position the dragon..
-                dragon.position.x = 50;
+                dragon.position.x = 100;
                 dragon.position.y = 200;
                 dragon.scale.x = 0.2;
                 dragon.scale.y = 0.2;
@@ -162,7 +162,7 @@ var Game;
              */
             Parallax.prototype._update = function () {
                 this._tilingSpriteManager.get(this.FAR_TEXTURE_SETTINGS.NAME).decreaseTilePosition(this.FAR_TEXTURE_SETTINGS.SPEED);
-                this._tilingSpriteManager.get(this.MID_TEXTURE_SETTINGS.NAME).increaseTilePosition(this.MID_TEXTURE_SETTINGS.SPEED);
+                this._tilingSpriteManager.get(this.MID_TEXTURE_SETTINGS.NAME).decreaseTilePosition(this.MID_TEXTURE_SETTINGS.SPEED);
                 // Render the stage. Basically refresh the canvas content.
                 this._renderer.render(this._stage);
                 // Infinite loop that will refresh the rendered content on each loop.
