@@ -1,22 +1,22 @@
 ///<reference path='./../../lib/def/defLoader.d.ts'/>
 /**
-* Cache files provided by the game application through HTTP.
-* Execute a request, check if there is any different file and get files from the game if so.
-* Copy all cached files in the /shared folder, use configuration file to know which files must be cached.
-* It is possible to overload the configuration in the child itself, by changing the variables in the class.
-* Variables here and config file will be merged to cache the files.
-*
-* This class is located on the game to share it easily with all children application.
-*/
+ * Cache files provided by the game application through HTTP.
+ * Execute a request, check if there is any different file and get files from the game if so.
+ * Copy all cached files in the /shared folder, use configuration file to know which files must be cached.
+ * It is possible to overload the configuration in the child itself, by changing the variables in the class.
+ * Variables here and config file will be merged to cache the files.
+ *
+ * This class is located on the game to share it easily with all children application.
+ */
 var CoreCache = (function () {
     function CoreCache() {
     }
     /**
-    * Determine if we should do the cache or not to avoid infinite loop using automatic server reload on file change.
-    *
-    * @returns {boolean}
-    * @private
-    */
+     * Determine if we should do the cache or not to avoid infinite loop using automatic server reload on file change.
+     *
+     * @returns {boolean}
+     * @private
+     */
     CoreCache._shouldDoCache = function () {
         var filename = __config.cache.lastCacheTimestampFile;
         if (fs.existsSync(__config.path.base + filename)) {
@@ -26,107 +26,108 @@ var CoreCache = (function () {
             if (oldTimestamp + timeKeepCache > newTimestamp) {
                 consoleDev('Cache NON reloaded because the previous cache regeneration was too close. Remaining time: ' + (Math.abs(newTimestamp - oldTimestamp - timeKeepCache) / 1000));
                 return false;
-            } else {
+            }
+            else {
                 return true;
             }
-        } else {
+        }
+        else {
             return true;
         }
     };
-
     /**
-    * Update the timestamp value into the .tmp dir.
-    *
-    * @param callback  Callback to execute once the file is written.
-    * @private
-    */
+     * Update the timestamp value into the .tmp dir.
+     *
+     * @param callback  Callback to execute once the file is written.
+     * @private
+     */
     CoreCache._cacheDone = function (callback) {
         var filename = __config.cache.lastCacheTimestampFile;
         var dirpath = path.resolve(__config.path.base, path.dirname(filename));
-
         // Ensure the path exists with mkdirp, if it doesn't, create all missing folders.
         mkdirp(dirpath, function (err) {
             if (err) {
                 consoleDev('Unable to create the directories "' + dirpath + '" in' + __filename + ' at ' + __line + '\n' + err.message, 'error');
-            } else {
+            }
+            else {
                 fs.writeFile(__config.path.base + filename, new Date().getTime(), function (err) {
                     if (err) {
                         consoleDev('Unable to write the new cache timestamp in ' + filename + ' from ' + __filename + ' at ' + __line + '\n' + err.message, 'error');
-                    } else {
+                    }
+                    else {
                         consoleDev('Cache process done!');
                     }
-
                     callback ? callback() : '';
                 });
             }
         });
     };
-
     /**
-    * Cache a single file from the host response.
-    *
-    * @param fileResponse          Host response.
-    * @param relativePathFromBase  Relative path from the base directory.
-    * @param callback              Callback to execute if the file is cached.
-    * @private
-    */
+     * Cache a single file from the host response.
+     *
+     * @param fileResponse          Host response.
+     * @param relativePathFromBase  Relative path from the base directory.
+     * @param callback              Callback to execute if the file is cached.
+     * @private
+     */
     CoreCache._cacheFile = function (fileResponse, relativePathFromBase, callback) {
         var file = fileResponse.filename;
         var ext;
-
         for (var j in CoreCache._extensions) {
             var _ext = CoreCache._extensions[j];
             if (fileResponse[_ext] !== false) {
                 ext = _ext;
             }
         }
-
         var filePath = __config.path.base + relativePathFromBase + fileResponse.filename + '.' + ext;
-
         // Check if the cached file is different from the file we got.
         if (fs.existsSync(filePath)) {
             var cachedFileContent = fs.readFileSync(filePath).toString('utf8');
-        } else {
+        }
+        else {
             var cachedFileContent = false;
         }
-
         if (cachedFileContent !== fileResponse[ext]) {
             fs.writeFile(filePath, fileResponse[ext], function () {
                 callback ? callback() : '';
             });
             consoleDev('===> Cached updated for "' + relativePathFromBase + file + '".' + ext, 'warn');
-        } else {
+        }
+        else {
             consoleDev('Cached non updated for "' + relativePathFromBase + file + '".' + ext + '. [Identical]', 'verbose');
         }
     };
-
     /**
-    * Process a HTTP request to the host to cache a group of files.
-    * Display error only if the host in not already set as not available.
-    *
-    * @param files                 Files to process.
-    * @param controller            Controller to call in the host.
-    * @param method                Method to call in the controller.
-    * @param relativePathFromBase  Relative path from the base directory.
-    * @param callback              Callback to execute if the file is cached.
-    * @private
-    */
+     * Process a HTTP request to the host to cache a group of files.
+     * Display error only if the host in not already set as not available.
+     *
+     * @param files                 Files to process.
+     * @param controller            Controller to call in the host.
+     * @param method                Method to call in the controller.
+     * @param relativePathFromBase  Relative path from the base directory.
+     * @param callback              Callback to execute if the file is cached.
+     * @private
+     */
     CoreCache._cacheFiles = function (files, controller, method, relativePathFromBase, callback) {
         for (var i in files) {
             var file = files[i];
-
             // If the host is still reachable.
             if (CoreCache.host_available) {
-                __request.send(controller, method, { 'file': file }, {}, function (message, response) {
+                __request.send(controller, method, { 'file': file }, {}, 
+                /* Success callback */
+                function (message, response) {
                     if (message.getStatus()) {
                         CoreCache._cacheFile(message.getData(), relativePathFromBase, function () {
                             callback ? callback() : '';
                         });
-                    } else {
+                    }
+                    else {
                         consoleDev('/!!!\\ ===> The file ' + relativePathFromBase + file + ' was not found on Game server: ' + message.getMessage(), 'warn');
                         consoleDev('/!!!\\ ===> ' + JSON.stringify(message.getData()), 'warn');
                     }
-                }, function (error, response, message, options) {
+                }, 
+                /* Error callback */
+                function (error, response, message, options) {
                     // Display error server side.
                     if (error && error.code == __request.CONNECTION_REFUSED) {
                         // Display the message only once. TODO This solution is not the best, all requests are sent, even if only one message is displayed, this is due to the fact that all requests are sent even before the first response is received.
@@ -134,7 +135,8 @@ var CoreCache = (function () {
                             consoleDev('Game server not running, caching aborted.', 'warn');
                         }
                         CoreCache.host_available = false;
-                    } else {
+                    }
+                    else {
                         consoleDev(response, 'warn');
                     }
                 });
@@ -142,15 +144,14 @@ var CoreCache = (function () {
             }
         }
     };
-
     /*********************************************************************
-    ************************* Public ************************************
-    *********************************************************************/
+     ************************* Public ************************************
+     *********************************************************************/
     /**
-    * Will cache all files to cache based on the local configuration.
-    *
-    * @param callback  Callback to execute once the cache is done.
-    */
+     * Will cache all files to cache based on the local configuration.
+     *
+     * @param callback  Callback to execute once the cache is done.
+     */
     CoreCache.cacheFilesFromGameServer = function (callback) {
         // Check if we should generate the cache.
         if (CoreCache._shouldDoCache()) {
@@ -164,37 +165,84 @@ var CoreCache = (function () {
             CoreCache._cacheFiles(_.union(__config.cache.files.typescript_def, CoreCache._sharedDefFiles), 'file', 'def', 'shared/app/lib/def/');
             CoreCache._cacheFiles(_.union(__config.cache.files.globals, CoreCache._sharedGlobalsFiles), 'file', 'global', 'shared/app/globals/');
             CoreCache._cacheFiles(_.union(__config.cache.files.public, CoreCache._sharedPublicFiles), 'file', 'public', 'shared/app/public/');
-
             // To avoid infinite caching loop, just update the timestamp in the file.
             CoreCache._cacheDone(function () {
                 // Start the server.
                 callback();
             });
-        } else {
+        }
+        else {
             // Start the server.
             callback();
         }
     };
+    /**
+     * If the host is not available, then it will be set to false.
+     * Use to display error messages due to the not available host only once.
+     *
+     * @type {boolean}
+     */
     CoreCache.host_available = true;
-
+    /**
+     * Allowed file extensions to get from the host.
+     *
+     * @type {string[]}
+     * @private
+     */
     CoreCache._extensions = ['ts', 'js', 'json'];
-
+    /**
+     * List of the shared config files to get.
+     *
+     * @type {string[]}
+     */
     CoreCache._sharedConfigFiles = [];
-
+    /**
+     * List of the shared lib files to get.
+     *
+     * @type {string[]}
+     */
     CoreCache._sharedLibFiles = [];
-
+    /**
+     * List of the shared core controller files to get.
+     *
+     * @type {string[]}
+     */
     CoreCache._sharedCoreControllersFiles = [];
-
+    /**
+     * List of the shared core lib files to get.
+     *
+     * @type {string[]}
+     */
     CoreCache._sharedCoreLibFiles = [];
-
+    /**
+     * List of the shared model files to get.
+     *
+     * @type {string[]}
+     */
     CoreCache._sharedCoreModelsFiles = [];
-
+    /**
+     * List of the shared core service files to get.
+     *
+     * @type {string[]}
+     */
     CoreCache._sharedCoreServicesFiles = [];
-
+    /**
+     * List of the shared typescript definition files to get.
+     *
+     * @type {string[]}
+     */
     CoreCache._sharedDefFiles = [];
-
+    /**
+     * List of the shared global files to get.
+     *
+     * @type {string[]}
+     */
     CoreCache._sharedGlobalsFiles = [];
-
+    /**
+     * List of the shared public files to get.
+     *
+     * @type {string[]}
+     */
     CoreCache._sharedPublicFiles = [];
     return CoreCache;
 })();

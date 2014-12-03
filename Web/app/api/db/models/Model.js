@@ -6,14 +6,14 @@ var __extends = this.__extends || function (d, b) {
     d.prototype = new __();
 };
 var model = require('./../../../shared/app/core/models/CoreModel');
-
 /**
-* Package that contains all Models used to interact with the database.
-*/
+ * Package that contains all Models used to interact with the database.
+ */
+var Models;
 (function (Models) {
     /**
-    * Our own implementation of the super model that all model inherits.
-    */
+     * Our own implementation of the super model that all model inherits.
+     */
     var Model = (function (_super) {
         __extends(Model, _super);
         function Model() {
@@ -22,10 +22,9 @@ var model = require('./../../../shared/app/core/models/CoreModel');
         return Model;
     })(model.CoreModels.Model);
     Models.Model = Model;
-
     /**
-    * Our own implementation of the MongoDb errors manager, used statically.
-    */
+     * Our own implementation of the MongoDb errors manager, used statically.
+     */
     var MongoError = (function (_super) {
         __extends(MongoError, _super);
         function MongoError() {
@@ -34,8 +33,5 @@ var model = require('./../../../shared/app/core/models/CoreModel');
         return MongoError;
     })(model.CoreModels.MongoError);
     Models.MongoError = MongoError;
-
-    
-})(exports.Models || (exports.Models = {}));
-var Models = exports.Models;
+})(Models = exports.Models || (exports.Models = {}));
 //# sourceMappingURL=Model.js.map

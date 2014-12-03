@@ -6,20 +6,19 @@ var __extends = this.__extends || function (d, b) {
     d.prototype = new __();
 };
 var dao = require('./../../shared/app/core/lib/CoreDao');
-
 /**
-* Use to load all Models. Data Access Object.
-* Acts as a Singleton object.
-*
-* @author  Ambroise Dhenain
-*
-* @example
-*          var User = __Dao.getModel('User');
-*          console.log(User);
-*          console.log(__Dao.getSchema('User'));
-*
-*          var minLength = __Dao.getSchema('user').login.minLength;
-*/
+ * Use to load all Models. Data Access Object.
+ * Acts as a Singleton object.
+ *
+ * @author  Ambroise Dhenain
+ *
+ * @example
+ *          var User = __Dao.getModel('User');
+ *          console.log(User);
+ *          console.log(__Dao.getSchema('User'));
+ *
+ *          var minLength = __Dao.getSchema('user').login.minLength;
+ */
 var Dao = (function (_super) {
     __extends(Dao, _super);
     function Dao() {
@@ -28,11 +27,10 @@ var Dao = (function (_super) {
     return Dao;
 })(dao.CoreDao);
 exports.Dao = Dao;
-
 (function () {
     /**
-    * We change the path of the CoreDao to force to load model files using a custom path for this project.
-    */
+     * We change the path of the CoreDao to force to load model files using a custom path for this project.
+     */
     Dao.setModelDirectory(path.join(__dirname, "../db/models/"));
 })();
 //# sourceMappingURL=Dao.js.map

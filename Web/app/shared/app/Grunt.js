@@ -1,19 +1,18 @@
 ///<reference path='./lib/def/defLoader.d.ts'/>
-define(["require", "exports", './Cli'], function(require, exports, cli) {
+define(["require", "exports", './Cli'], function (require, exports, cli) {
     var Cli = cli.Cli;
-
     /**
-    * Tool to regenerate the generated files from Node servers.
-    */
+     * Tool to regenerate the generated files from Node servers.
+     */
     var Grunt = (function () {
         function Grunt() {
         }
         /**
-        * Execute a grunt command.
-        * @param args  Args of the command. ('watch')
-        */
+         * Execute a grunt command.
+         * @param args  Args of the command. ('watch')
+         */
         Grunt.grunt = function (args) {
-            if (typeof args === "undefined") { args = []; }
+            if (args === void 0) { args = []; }
             Cli.execute(Grunt._command, args, function (command, args, env) {
                 console.log('Grunt has been automatically executed. (' + env + ')');
             }, function (command, args, env) {
@@ -22,6 +21,11 @@ define(["require", "exports", './Cli'], function(require, exports, cli) {
                 console.error('------------- Unix "' + command + '" command failed too. ---------------');
             });
         };
+        /**
+         * Command name to execute.
+         * @type {string}
+         * @private
+         */
         Grunt._command = 'grunt';
         return Grunt;
     })();
