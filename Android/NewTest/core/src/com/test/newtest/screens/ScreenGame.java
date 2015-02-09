@@ -23,11 +23,11 @@ import com.test.newtest.Enemy;
  * Created by Julien on 03/12/2014.
  */
 public class ScreenGame extends TestScreen {
-    private static final float PLANE_JUMP_IMPULSE = 930;
+    private static final float PLAYER_JUMP_IMPULSE = 930;
     private static final float GRAVITY = -30;
-    private static final float PLANE_VELOCITY_X = 250;
-    private static final float PLANE_START_Y = 44;
-    private static final float PLANE_START_X = 50;
+    private static final float PLAYER_VELOCITY_X = 250;
+    private static final float PLAYER_START_Y = 44;
+    private static final float PLAYER_START_X = 50;
     ShapeRenderer shapeRenderer;
     SpriteBatch batch;
     OrthographicCamera camera;
@@ -38,17 +38,17 @@ public class ScreenGame extends TestScreen {
     TextureRegion rock;
     TextureRegion adel;
     TextureRegion rockDown;
-    Animation plane;
+    Animation player;
     TextureRegion ready;
     TextureRegion gameOver;
     BitmapFont font;
 
-    Vector2 planePosition = new Vector2();
-    Vector2 planeVelocity = new Vector2();
-    float planeStateTime = 0;
+    Vector2 playerPosition = new Vector2();
+    Vector2 playerVelocity = new Vector2();
+    float playerStateTime = 0;
     Vector2 gravity = new Vector2();
     Array<Rock> rocks = new Array<Rock>();
-    Array<Enemy> ennemies = new Array<Enemy>();
+    Array<Enemy> enemies = new Array<Enemy>();
 
 
     GameState gameState = GameState.Start;
@@ -95,8 +95,8 @@ public class ScreenGame extends TestScreen {
         ready = new TextureRegion(new Texture("ready.png"));
         gameOver = new TextureRegion(new Texture("gameover.png"));
 
-        plane = new Animation(0.05f, new TextureRegion(frame1), new TextureRegion(frame2), new TextureRegion(frame3), new TextureRegion(frame2));
-        plane.setPlayMode(Animation.PlayMode.LOOP);
+        player = new Animation(0.05f, new TextureRegion(frame1), new TextureRegion(frame2), new TextureRegion(frame3), new TextureRegion(frame2));
+        player.setPlayMode(Animation.PlayMode.LOOP);
 
         music = Gdx.audio.newMusic(Gdx.files.internal("music2.mp3"));
         music.setLooping(true);
@@ -111,8 +111,8 @@ public class ScreenGame extends TestScreen {
     private void resetWorld() {
         score = 0;
         groundOffsetX = 0;
-        planePosition.set(PLANE_START_X, PLANE_START_Y);
-        planeVelocity.set(0, 0);
+        playerPosition.set(PLAYER_START_X, PLAYER_START_Y);
+        playerVelocity.set(0, 0);
         gravity.set(0, GRAVITY);
         camera.position.x = 400;
 
@@ -122,19 +122,19 @@ public class ScreenGame extends TestScreen {
             rocks.add(new Rock(700 + i * 300, a, rock));
         }*/
 
-        ennemies.add(new Enemy(700, 44));
+        enemies.add(new Enemy(700, 44));
     }
 
     private void updateWorld() {
         float deltaTime = Gdx.graphics.getDeltaTime();
-        planeStateTime += deltaTime;
+        playerStateTime += deltaTime;
 
         if(Gdx.input.justTouched()) {
             if(gameState == GameState.Start) {
                 gameState = GameState.Running;
-                planeVelocity.set(PLANE_VELOCITY_X, 0);
+                playerVelocity.set(PLAYER_VELOCITY_X, 0);
             } else if(gameState == GameState.Running) {
-                planeVelocity.set(PLANE_VELOCITY_X, PLANE_JUMP_IMPULSE);
+                playerVelocity.set(PLAYER_VELOCITY_X, PLAYER_JUMP_IMPULSE);
                 gameState = GameState.Jumping;
             }else if(gameState == GameState.GameOver) {
                 gameState = GameState.Start;
@@ -142,16 +142,16 @@ public class ScreenGame extends TestScreen {
             }
         }
 
-        if(gameState != GameState.Start) planeVelocity.add(gravity);
+        if(gameState != GameState.Start) playerVelocity.add(gravity);
 
-        planePosition.mulAdd(planeVelocity, deltaTime);
+        playerPosition.mulAdd(playerVelocity, deltaTime);
 
-        camera.position.x = planePosition.x + 350;
+        camera.position.x = playerPosition.x + 350;
         if(camera.position.x - groundOffsetX > ground.getRegionWidth() + 400) {
             groundOffsetX += ground.getRegionWidth();
         }
 
-        rect1.set(planePosition.x + 20, planePosition.y, plane.getKeyFrames()[0].getRegionWidth() - 20, plane.getKeyFrames()[0].getRegionHeight());
+        rect1.set(playerPosition.x + 20, playerPosition.y, player.getKeyFrames()[0].getRegionWidth() - 20, player.getKeyFrames()[0].getRegionHeight());
         for(Rock r: rocks) {
             if(camera.position.x - r.position.x > 400 + r.image.getRegionWidth()) {
                 int a = MathUtils.random(-100, -5);
@@ -164,35 +164,34 @@ public class ScreenGame extends TestScreen {
             if(rect1.overlaps(rect2)) {
                 if(gameState != GameState.GameOver) explode.play();
                 gameState = GameState.GameOver;
-                planeVelocity.x = 0;
+                playerVelocity.x = 0;
             }
-            if(r.position.x < planePosition.x && !r.counted) {
+            if(r.position.x < playerPosition.x && !r.counted) {
                 score++;
                 r.counted = true;
             }
         }
 
-        for(Enemy e: ennemies) {
+        for(Enemy e: enemies) {
             if(camera.position.x - e.position.x > 400 + e.image.getRegionWidth()) {
                 e.position.x += 300;
                 e.position.y = 44;
-                e.image = adel;
             }
             rect2.set(e.position.x, e.position.y, e.image.getRegionWidth(), e.image.getRegionHeight());
             if(rect1.overlaps(rect2)) {
                 if(gameState != GameState.GameOver) explode.play();
                 gameState = GameState.GameOver;
-                planeVelocity.x = 0;
+                playerVelocity.x = 0;
             }
         }
-        /*if(planePosition.y + plane.getKeyFrames()[0].getRegionHeight() > 480 - ground.getRegionHeight()) {
+        /*if(playerPosition.y + player.getKeyFrames()[0].getRegionHeight() > 480 - ground.getRegionHeight()) {
             if(gameState != GameState.GameOver) explode.play();
             gameState = GameState.GameOver;
-            planeVelocity.x = 0;
+            playerVelocity.x = 0;
         }*/
 
-        if (planePosition.y <= ground.getRegionHeight()){
-            planePosition.y = ground.getRegionHeight();
+        if (playerPosition.y <= ground.getRegionHeight()){
+            playerPosition.y = ground.getRegionHeight();
             if (gameState != GameState.GameOver) gameState = GameState.Running;
         }
     }
@@ -205,12 +204,12 @@ public class ScreenGame extends TestScreen {
         for(Rock rock: rocks) {
             batch.draw(rock.image, rock.position.x, rock.position.y);
         }
-        for (Enemy e: ennemies){
+        for (Enemy e: enemies){
             batch.draw(e.image, e.position.x, e.position.y);
         }
         batch.draw(ground, groundOffsetX, 0);
         batch.draw(ground, groundOffsetX + ground.getRegionWidth(), 0);
-        batch.draw(plane.getKeyFrame(planeStateTime), planePosition.x, planePosition.y);
+        batch.draw(player.getKeyFrame(playerStateTime), playerPosition.x, playerPosition.y);
         batch.end();
 
         batch.setProjectionMatrix(uiCamera.combined);

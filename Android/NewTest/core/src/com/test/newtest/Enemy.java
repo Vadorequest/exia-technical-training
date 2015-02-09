@@ -14,7 +14,7 @@ public class Enemy {
     public Enemy(float x, float y){
         this.position.x = x;
         this.position.y = y;
-        image = new TextureRegion(new Texture("ADEL_PIXEL.png"));
+        image = new TextureRegion(new Texture("LEO_PIXEL.png"));
     }
 
 }

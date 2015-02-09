@@ -9,9 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.test.newtest.screens.ScreenGame;
 
 public class NewTest extends Game {
-	SpriteBatch batch;
-	Texture img;
-	
+
 	@Override
 	public void create () {setScreen(new ScreenGame(this));}
 
