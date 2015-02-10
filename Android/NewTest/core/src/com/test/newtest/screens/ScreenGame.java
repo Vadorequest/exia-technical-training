@@ -58,6 +58,7 @@ public class ScreenGame extends TestScreen {
 
     Music music;
     Sound explode;
+    Sound jump;
 
 
     public ScreenGame (Game game) {
@@ -90,12 +91,14 @@ public class ScreenGame extends TestScreen {
         Texture frame1 = new Texture("ADEL_PIXEL2.png");
         frame1.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         Texture frame2 = new Texture("ADEL_PIXEL2L.png");
+        frame2.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         Texture frame3 = new Texture("ADEL_PIXEL2R.png");
+        frame3.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
         ready = new TextureRegion(new Texture("ready.png"));
         gameOver = new TextureRegion(new Texture("gameover.png"));
 
-        player = new Animation(0.05f, new TextureRegion(frame1), new TextureRegion(frame2), new TextureRegion(frame1), new TextureRegion(frame3));
+        player = new Animation(0.1f, new TextureRegion(frame1), new TextureRegion(frame2), new TextureRegion(frame1), new TextureRegion(frame3));
         player.setPlayMode(Animation.PlayMode.LOOP);
 
         music = Gdx.audio.newMusic(Gdx.files.internal("music2.mp3"));
@@ -103,6 +106,7 @@ public class ScreenGame extends TestScreen {
         music.play();
 
         explode = Gdx.audio.newSound(Gdx.files.internal("explode.wav"));
+        jump = Gdx.audio.newSound(Gdx.files.internal("jump.mp3"));
 
         resetWorld();
 
@@ -136,6 +140,7 @@ public class ScreenGame extends TestScreen {
             } else if(gameState == GameState.Running) {
                 playerVelocity.set(PLAYER_VELOCITY_X, PLAYER_JUMP_IMPULSE);
                 gameState = GameState.Jumping;
+                jump.play();
             }else if(gameState == GameState.GameOver) {
                 gameState = GameState.Start;
                 resetWorld();
