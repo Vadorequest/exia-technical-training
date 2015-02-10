@@ -10,8 +10,10 @@ import com.badlogic.gdx.math.Vector2;
 public class Enemy {
     public Vector2 position = new Vector2();
     public TextureRegion image;
+    public boolean counted;
 
     public Enemy(float x, float y){
+        counted = false;
         this.position.x = x;
         this.position.y = y;
         image = new TextureRegion(new Texture("LEO_PIXEL2.png"));

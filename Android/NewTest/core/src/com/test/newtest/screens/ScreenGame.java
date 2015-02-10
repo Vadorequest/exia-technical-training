@@ -179,14 +179,19 @@ public class ScreenGame extends TestScreen {
 
         for(Enemy e: enemies) {
             if(camera.position.x - e.position.x > 400 + e.image.getRegionWidth()) {
-                e.position.x += 300;
+                e.position.x += 800;
                 e.position.y = 44;
+                e.counted = false;
             }
             rect2.set(e.position.x, e.position.y, e.image.getRegionWidth(), e.image.getRegionHeight());
             if(rect1.overlaps(rect2)) {
                 if(gameState != GameState.GameOver) explode.play();
                 gameState = GameState.GameOver;
                 playerVelocity.x = 0;
+            }
+            if(e.position.x < playerPosition.x && !e.counted) {
+                score++;
+                e.counted = true;
             }
         }
         /*if(playerPosition.y + player.getKeyFrames()[0].getRegionHeight() > 480 - ground.getRegionHeight()) {
