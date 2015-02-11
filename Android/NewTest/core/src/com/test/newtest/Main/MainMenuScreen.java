@@ -81,7 +81,6 @@ public class MainMenuScreen implements Screen {
             public void changed (ChangeEvent event, Actor actor) {
                 Btn_Play.setText("Starting new game");
                 g.setScreen( new ScreenGame(g));
-
             }
         });
 

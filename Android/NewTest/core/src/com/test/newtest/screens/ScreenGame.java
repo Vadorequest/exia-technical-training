@@ -328,10 +328,8 @@ public class ScreenGame extends TestScreen {
         updateWorld();
         drawWorld();
 
-
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage_menu.draw();
-
 
     }
 
