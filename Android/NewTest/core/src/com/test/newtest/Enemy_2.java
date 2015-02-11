@@ -7,15 +7,15 @@ import com.badlogic.gdx.math.Vector2;
 /**
  * Created by Julien on 10/12/2014.
  */
-public class Enemy {
+public class Enemy_2 {
     public Vector2 position = new Vector2();
     public TextureRegion image;
     public boolean counted;
 
-    public Enemy(float x, float y){
+    public Enemy_2(float x, float y){
         counted = false;
         this.position.x = x;
         this.position.y = y;
-        image = new TextureRegion(new Texture("LEO_PIXEL2.png"));
+        image = new TextureRegion(new Texture("CHOSE1.png"));
     }
 }

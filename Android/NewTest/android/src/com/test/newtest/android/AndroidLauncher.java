@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
+import com.test.newtest.Main.MainMenuScreen;
 import com.test.newtest.NewTest;
 
 public class AndroidLauncher extends AndroidApplication {
