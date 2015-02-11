@@ -35,6 +35,8 @@ public class MainMenuScreen implements Screen {
     Skin skin;
     Stage stage;
     SpriteBatch batch;
+    Texture adelrun = new Texture("ADEL_RUN.png");
+    Texture background = new Texture("background.png");
 
     Game g;
     public MainMenuScreen(Game g){
@@ -74,7 +76,7 @@ public class MainMenuScreen implements Screen {
 
 
         final TextButton Btn_Play=new TextButton("PLAY",textButtonStyle);
-        Btn_Play.setPosition(200, 200);
+        Btn_Play.setPosition(800, 200);
         stage.addActor(Btn_Play);
 
         Btn_Play.addListener(new ChangeListener() {
@@ -85,7 +87,7 @@ public class MainMenuScreen implements Screen {
         });
 
         final TextButton Btn_Scores=new TextButton(" SCORES ",textButtonStyle);
-        Btn_Scores.setPosition(400, 200);
+        Btn_Scores.setPosition(1000, 200);
         stage.addActor(Btn_Scores);
 
         Btn_Scores.addListener(new ChangeListener() {
@@ -97,7 +99,7 @@ public class MainMenuScreen implements Screen {
         });
 
         final TextButton Btn_Exit=new TextButton("EXIT",textButtonStyle);
-        Btn_Exit.setPosition(600, 200);
+        Btn_Exit.setPosition(1200, 200);
         stage.addActor(Btn_Exit);
 
         Btn_Exit.addListener(new ChangeListener() {
@@ -127,6 +129,11 @@ public class MainMenuScreen implements Screen {
     public void render (float delta) {
         Gdx.gl.glClearColor(0.2f, 0.2f, 0.2f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        batch.begin();
+
+        batch.draw(background,0,0, Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
+        batch.draw(adelrun,(Gdx.graphics.getWidth() / 2) /4, Gdx.graphics.getHeight() / 2.5f, adelrun.getWidth()*4, adelrun.getHeight()*4);
+        batch.end();
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
     }

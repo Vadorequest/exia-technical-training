@@ -52,7 +52,7 @@ public class ScreenGame extends TestScreen {
     OrthographicCamera uiCamera;
     Texture background;
     TextureRegion ground;
-    TextureRegion wall;
+    //TextureRegion wall;
     float groundOffsetX = 0;
     float wallOffsetX = 0;
     TextureRegion rock;
@@ -131,7 +131,7 @@ public class ScreenGame extends TestScreen {
         font.setScale(2, 2);
 
         background = new Texture("background.png");
-        wall = new TextureRegion(new Texture("ground.png"));
+        //wall = new TextureRegion(new Texture("ground.png"));
         ground = new TextureRegion(new Texture("ground2.png"));
 
         adel = new TextureRegion(new Texture("ADEL_PIXEL2.png"));
@@ -218,9 +218,9 @@ public class ScreenGame extends TestScreen {
             groundOffsetX += ground.getRegionWidth();
         }
 
-        if (camera.position.x - wallOffsetX > wall.getRegionWidth() + 400) {
-            wallOffsetX -= wall.getRegionWidth();
-        }
+//        if (camera.position.x - wallOffsetX > wall.getRegionWidth() + 400) {
+//            wallOffsetX -= wall.getRegionWidth();
+//        }
 
         rect1.set(playerPosition.x, playerPosition.y, player.getKeyFrames()[0].getRegionWidth(), player.getKeyFrames()[0].getRegionHeight());
 
@@ -294,8 +294,8 @@ public class ScreenGame extends TestScreen {
             batch.draw(e.image, e.position.x, e.position.y);
         }*/
 
-        batch.draw(wall, groundOffsetX, 0);
-        batch.draw(wall, groundOffsetX + wall.getRegionWidth() + 10, 0);
+//        batch.draw(wall, groundOffsetX, 0);
+//        batch.draw(wall, groundOffsetX + wall.getRegionWidth() + 10, 0);
 
         batch.draw(ground, groundOffsetX, 0);
         batch.draw(ground, groundOffsetX + ground.getRegionWidth(), 0);
